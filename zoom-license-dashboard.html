@@ -1,0 +1,1922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoom License Dashboard — AssociatesMD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #f5f6f8;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f9fafb;
+    --bg-muted: #f0f1f4;
+    --border: #e2e5eb;
+    --border-active: #0d9373;
+    --text-primary: #1a1d24;
+    --text-secondary: #5c6370;
+    --text-muted: #8c919c;
+    --accent-teal: #0d9373;
+    --accent-teal-dim: rgba(13,147,115,0.08);
+    --accent-teal-light: #e8f5f1;
+    --accent-blue: #2563eb;
+    --accent-blue-dim: rgba(37,99,235,0.08);
+    --accent-blue-light: #eff4ff;
+    --accent-amber: #d97706;
+    --accent-amber-dim: rgba(217,119,6,0.08);
+    --accent-amber-light: #fef9ee;
+    --accent-rose: #dc2626;
+    --accent-rose-dim: rgba(220,38,38,0.08);
+    --accent-rose-light: #fef2f2;
+    --accent-violet: #7c3aed;
+    --accent-violet-dim: rgba(124,58,237,0.08);
+    --accent-violet-light: #f5f0ff;
+    --radius: 10px;
+    --radius-sm: 7px;
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+    --shadow-hover: 0 2px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.06);
+    --transition: 180ms ease;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Layout Shell ── */
+  .shell {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 256px;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 16px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 10;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 36px;
+    padding: 0 8px;
+  }
+  .sidebar-brand-icon {
+    width: 36px; height: 36px;
+    background: var(--accent-teal);
+    border-radius: 9px;
+    display: grid; place-items: center;
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .sidebar-brand h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text-primary);
+  }
+  .sidebar-brand h1 span {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: all var(--transition);
+    cursor: pointer;
+  }
+  .sidebar-nav a:hover {
+    background: var(--bg-muted);
+    color: var(--text-primary);
+  }
+  .sidebar-nav a.active {
+    background: var(--accent-teal-dim);
+    color: var(--accent-teal);
+    font-weight: 500;
+  }
+  .sidebar-nav a svg {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    opacity: 0.65;
+  }
+  .sidebar-nav a.active svg { opacity: 1; }
+
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 18px 12px 6px;
+  }
+
+  .sidebar-footer {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* ── Main Content ── */
+  .main {
+    flex: 1;
+    margin-left: 256px;
+    padding: 32px 40px 60px;
+    max-width: 1280px;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Page Header ── */
+  .page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .page-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+  .page-header p {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--accent-teal-light);
+    border: 1px solid rgba(13,147,115,0.15);
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--accent-teal);
+    font-weight: 500;
+  }
+  .header-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent-teal);
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── KPI Cards ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition);
+    box-shadow: var(--shadow-card);
+  }
+  .kpi-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-1px);
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .kpi-card.teal::before { background: var(--accent-teal); }
+  .kpi-card.blue::before { background: var(--accent-blue); }
+  .kpi-card.amber::before { background: var(--accent-amber); }
+  .kpi-card.rose::before { background: var(--accent-rose); }
+  .kpi-card.violet::before { background: var(--accent-violet); }
+
+  .kpi-icon {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: grid; place-items: center;
+    margin-bottom: 14px;
+  }
+  .kpi-card.teal .kpi-icon { background: var(--accent-teal-light); color: var(--accent-teal); }
+  .kpi-card.blue .kpi-icon { background: var(--accent-blue-light); color: var(--accent-blue); }
+  .kpi-card.amber .kpi-icon { background: var(--accent-amber-light); color: var(--accent-amber); }
+  .kpi-card.rose .kpi-icon { background: var(--accent-rose-light); color: var(--accent-rose); }
+  .kpi-card.violet .kpi-icon { background: var(--accent-violet-light); color: var(--accent-violet); }
+
+  .kpi-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .kpi-value {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+  .kpi-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* ── Section Card ── */
+  .section-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+  }
+  .section-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-card-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-muted);
+  }
+  .search-input {
+    flex: 1;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px 8px 34px;
+    font-size: 13px;
+    color: var(--text-primary);
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='15' fill='none' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' stroke='%238c919c' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-input:focus { border-color: var(--accent-teal); box-shadow: 0 0 0 2px var(--accent-teal-dim); }
+
+  .filter-select {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 30px 8px 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238c919c' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    transition: border-color var(--transition);
+  }
+  .filter-select:focus { border-color: var(--accent-teal); }
+
+  /* ── Table ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .data-table thead th {
+    padding: 10px 22px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-muted);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  .data-table tbody tr {
+    transition: background var(--transition);
+  }
+  .data-table tbody tr:hover {
+    background: var(--bg-muted);
+  }
+  .data-table tbody td {
+    padding: 12px 22px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .user-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .user-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .user-avatar.a { background: #0d9373; }
+  .user-avatar.b { background: #2563eb; }
+  .user-avatar.c { background: #d97706; }
+  .user-avatar.d { background: #7c3aed; }
+  .user-avatar.e { background: #0891b2; }
+
+  .user-info .user-name {
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .user-info .user-email {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .badge {
+    display: inline-flex;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .badge-active {
+    background: var(--accent-teal-light);
+    color: var(--accent-teal);
+  }
+  .badge-site {
+    background: var(--accent-blue-dim);
+    color: var(--accent-blue);
+  }
+
+  .manager-select {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    appearance: none;
+    padding-right: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%238c919c' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    transition: all var(--transition);
+  }
+  .manager-select:focus {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 0 2px var(--accent-teal-dim);
+  }
+  .manager-select.has-value {
+    color: var(--text-primary);
+    border-color: rgba(13,147,115,0.3);
+  }
+
+  /* ── Site Distribution ── */
+  .site-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    padding: 22px;
+  }
+  .site-item {
+    padding: 16px;
+    background: var(--bg-muted);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: all var(--transition);
+  }
+  .site-item:hover { border-color: var(--accent-teal); }
+  .site-item-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .site-item-count {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-teal);
+  }
+  .site-item-label {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .site-bar {
+    height: 4px;
+    border-radius: 2px;
+    background: #e8eaed;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .site-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--accent-teal);
+    transition: width 600ms ease;
+  }
+
+  /* ── Number Allocation ── */
+  .alloc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 22px;
+  }
+  .alloc-item {
+    text-align: center;
+    padding: 18px 10px;
+    background: var(--bg-muted);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .alloc-item-value {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .alloc-item-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Settings ── */
+  .settings-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+  }
+  .settings-section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .settings-section > p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  .manager-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .manager-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition);
+  }
+  .manager-row:hover { border-color: var(--accent-teal); }
+  .manager-row .manager-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .manager-row .manager-email { font-size: 12px; color: var(--text-muted); flex: 1; }
+  .manager-row .manager-dept { font-size: 12px; color: var(--text-secondary); flex: 0.6; }
+
+  .btn-remove {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    transition: all var(--transition);
+  }
+  .btn-remove:hover {
+    color: var(--accent-rose);
+    background: var(--accent-rose-dim);
+  }
+
+  .add-manager-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.6fr auto;
+    gap: 10px;
+    align-items: end;
+  }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 5px;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  .form-input::placeholder { color: var(--text-muted); }
+  .form-input:focus { border-color: var(--accent-teal); box-shadow: 0 0 0 2px var(--accent-teal-dim); }
+
+  .btn-primary {
+    background: var(--accent-teal);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+  .btn-primary:hover {
+    background: #0b7d63;
+    box-shadow: 0 2px 8px rgba(13,147,115,0.25);
+  }
+
+  .btn-secondary {
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .btn-secondary:hover {
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+  }
+
+  /* ── CC Agent Tags ── */
+  .queue-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .queue-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--accent-teal-light);
+    color: var(--accent-teal);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .queue-tag.overflow {
+    background: var(--bg-muted);
+    color: var(--text-muted);
+    cursor: default;
+  }
+
+  /* ── CC Tabs ── */
+  .cc-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cc-tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition);
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: inherit;
+  }
+  .cc-tab:hover { color: var(--text-primary); }
+  .cc-tab.active {
+    color: var(--accent-teal);
+    border-bottom-color: var(--accent-teal);
+  }
+  .cc-tab-content { display: none; }
+  .cc-tab-content.active { display: block; }
+
+  /* ── Info Notice ── */
+  .info-notice {
+    padding: 16px 20px;
+    background: var(--accent-blue-light);
+    border: 1px solid rgba(37,99,235,0.15);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  .info-notice-icon {
+    width: 28px; height: 28px;
+    background: var(--accent-blue-dim);
+    border-radius: 7px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-blue);
+  }
+  .info-notice strong { color: var(--text-primary); font-weight: 600; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-teal);
+    border-radius: var(--radius-sm);
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--accent-teal);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 300ms ease;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeSlideUp 350ms ease both; }
+  .delay-1 { animation-delay: 40ms; }
+  .delay-2 { animation-delay: 80ms; }
+  .delay-3 { animation-delay: 120ms; }
+  .delay-4 { animation-delay: 160ms; }
+  .delay-5 { animation-delay: 200ms; }
+
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--text-muted);
+  }
+  .empty-state svg { width: 40px; height: 40px; margin-bottom: 14px; opacity: 0.35; }
+  .empty-state p { font-size: 14px; }
+
+  .table-wrap { max-height: 640px; overflow-y: auto; }
+  .bulk-actions { display: flex; gap: 10px; align-items: center; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .sidebar { width: 220px; }
+    .main { margin-left: 220px; padding: 24px; }
+    .add-manager-form { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 300ms; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 16px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .add-manager-form { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon">Z</div>
+      <h1>Zoom Licenses<span>AssociatesMD</span></h1>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Overview</div>
+      <a href="#" class="active" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+
+      <div class="sidebar-section-label">License Types</div>
+      <a href="#" data-page="phone-users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Zoom Phone
+      </a>
+      <a href="#" data-page="contact-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Contact Center
+      </a>
+
+      <div class="sidebar-section-label">Management</div>
+      <a href="#" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      Data as of March 27, 2026<br>
+      Powered by Zoom Phone API
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- ════════════ DASHBOARD PAGE ════════════ -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header animate-in">
+        <div>
+          <h2>License Overview</h2>
+          <p>Real-time Zoom license allocation for AssociatesMD</p>
+        </div>
+        <div>
+          <div class="header-badge"><span class="dot"></span> Live from Zoom API</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card teal animate-in delay-1">
+          <div class="kpi-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="kpi-label">Zoom Phone Users</div>
+          <div class="kpi-value">28</div>
+          <div class="kpi-sub">All active licenses</div>
+        </div>
+        <div class="kpi-card blue animate-in delay-2">
+          <div class="kpi-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+          </div>
+          <div class="kpi-label">Phone Licenses</div>
+          <div class="kpi-value">76 <span style="font-size:16px;font-weight:400;color:var(--text-muted)">/ 82</span></div>
+          <div class="kpi-sub">6 available licenses</div>
+        </div>
+        <div class="kpi-card amber animate-in delay-3">
+          <div class="kpi-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
+          </div>
+          <div class="kpi-label">Common Area Phones</div>
+          <div class="kpi-value" id="kpi-common-area">0</div>
+          <div class="kpi-sub">Clinic & office devices</div>
+        </div>
+        <div class="kpi-card rose animate-in delay-4">
+          <div class="kpi-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="kpi-label">CC Licenses</div>
+          <div class="kpi-value" id="kpi-cc-agents">32</div>
+          <div class="kpi-sub">29 agents + 3 admin-only</div>
+        </div>
+      </div>
+
+      <!-- Number Allocation Breakdown -->
+      <!-- Zoom Phone Usage (30 days) -->
+      <div class="section-card animate-in delay-3">
+        <div class="section-card-header">
+          <h3>Zoom Phone Usage <span style="font-weight:400;color:var(--text-muted);font-size:12px;margin-left:8px">Last 30 days</span></h3>
+        </div>
+        <div class="table-wrap" style="max-height:400px">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Total Calls</th>
+                <th>Inbound</th>
+                <th>Outbound</th>
+                <th>Talk Time</th>
+                <th>Activity</th>
+              </tr>
+            </thead>
+            <tbody id="phone-usage-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Contact Center Usage (30 days) -->
+      <div class="section-card animate-in delay-4">
+        <div class="section-card-header">
+          <h3>Contact Center Usage <span style="font-weight:400;color:var(--text-muted);font-size:12px;margin-left:8px">Last 30 days</span></h3>
+        </div>
+        <div class="table-wrap" style="max-height:400px">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Agent</th>
+                <th>Engagements</th>
+                <th>Handle Time</th>
+                <th>Avg Wait</th>
+                <th>Activity</th>
+              </tr>
+            </thead>
+            <tbody id="cc-usage-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Site Distribution -->
+      <div class="section-card animate-in delay-5">
+        <div class="section-card-header">
+          <h3>Users by Site</h3>
+        </div>
+        <div class="site-grid" id="site-grid"></div>
+      </div>
+    </div>
+
+    <!-- ════════════ PHONE USERS PAGE ════════════ -->
+    <div class="page" id="page-phone-users">
+      <div class="page-header">
+        <div>
+          <h2>Zoom Phone Users</h2>
+          <p>28 active licenses with manager assignments</p>
+        </div>
+        <div class="bulk-actions">
+          <button class="btn-secondary" onclick="exportCSV()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+          <button class="btn-primary" onclick="saveAllManagers()">Save All Assignments</button>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="filter-bar">
+          <input type="text" class="search-input" id="user-search" placeholder="Search by name, email, or department..." oninput="filterUsers()">
+          <select class="filter-select" id="site-filter" onchange="filterUsers()">
+            <option value="">All Sites</option>
+          </select>
+          <select class="filter-select" id="dept-filter" onchange="filterUsers()">
+            <option value="">All Departments</option>
+          </select>
+          <select class="filter-select" id="manager-filter" onchange="filterUsers()">
+            <option value="">All Managers</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Extension</th>
+                <th>Department</th>
+                <th>Site</th>
+                <th>Status</th>
+                <th>Manager</th>
+              </tr>
+            </thead>
+            <tbody id="phone-users-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ CONTACT CENTER PAGE ════════════ -->
+    <div class="page" id="page-contact-center">
+      <div class="page-header">
+        <div>
+          <h2>Contact Center</h2>
+          <p>32 CC licenses — 29 agents + 3 admin-only</p>
+        </div>
+        <div class="bulk-actions">
+          <button class="btn-secondary" onclick="exportCCCSV()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- CC KPI Strip -->
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+        <div class="kpi-card teal">
+          <div class="kpi-label">Active Agents</div>
+          <div class="kpi-value" id="cc-agent-count">29</div>
+          <div class="kpi-sub">Unique agents from engagements</div>
+        </div>
+        <div class="kpi-card blue">
+          <div class="kpi-label">Active Queues</div>
+          <div class="kpi-value" id="cc-active-queues">13</div>
+          <div class="kpi-sub">Excludes deprecated/demo</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Total Supervisors</div>
+          <div class="kpi-value" id="cc-total-supervisors">29</div>
+          <div class="kpi-sub">Supervisor assignments</div>
+        </div>
+        <div class="kpi-card violet">
+          <div class="kpi-label">Avg Queues / Agent</div>
+          <div class="kpi-value" id="cc-avg-queues">0</div>
+          <div class="kpi-sub">Queue coverage per agent</div>
+        </div>
+      </div>
+
+      <!-- CC Tabs -->
+      <div class="cc-tabs">
+        <button class="cc-tab active" data-tab="agents" onclick="switchCCTab('agents')">Agents (29)</button>
+        <button class="cc-tab" data-tab="admins" onclick="switchCCTab('admins')">Admins (3)</button>
+        <button class="cc-tab" data-tab="queues" onclick="switchCCTab('queues')">Queues (16)</button>
+      </div>
+
+      <!-- Agents Tab -->
+      <div class="cc-tab-content active" id="cc-tab-agents">
+        <div class="section-card">
+          <div class="filter-bar">
+            <input type="text" class="search-input" id="cc-agent-search" placeholder="Search agents..." oninput="filterCCAgents()">
+            <select class="filter-select" id="cc-queue-filter" onchange="filterCCAgents()">
+              <option value="">All Queues</option>
+            </select>
+            <select class="filter-select" id="cc-dept-filter" onchange="filterCCAgents()">
+              <option value="">All Departments</option>
+            </select>
+            <select class="filter-select" id="cc-mgr-filter" onchange="filterCCAgents()">
+              <option value="">All Managers</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Department</th>
+                  <th>Manager</th>
+                  <th>Queues</th>
+                  <th>Queue Details</th>
+                </tr>
+              </thead>
+              <tbody id="cc-agents-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px">
+          <button class="btn-primary" onclick="saveCCAssignments()">Save All Assignments</button>
+        </div>
+      </div>
+
+      <!-- Queues Tab -->
+      <!-- Admins Tab -->
+      <div class="cc-tab-content" id="cc-tab-admins">
+        <div class="section-card">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Admin User</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Last Login</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody id="cc-admins-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Queues Tab -->
+      <div class="cc-tab-content" id="cc-tab-queues">
+        <div class="section-card">
+          <div class="filter-bar">
+            <input type="text" class="search-input" id="cc-search" placeholder="Search queues..." oninput="filterCCQueues()">
+            <select class="filter-select" id="cc-status-filter" onchange="filterCCQueues()">
+              <option value="">All Queues</option>
+              <option value="active" selected>Active Only</option>
+              <option value="inactive">Inactive / Deprecated</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Queue Name</th>
+                  <th>Channel</th>
+                  <th>Agents</th>
+                  <th>Supervisors</th>
+                  <th>Status</th>
+                  <th>Last Modified</th>
+                </tr>
+              </thead>
+              <tbody id="cc-queues-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-notice">
+        <div class="info-notice-icon">i</div>
+        <div>
+          <strong>32 total CC licenses:</strong> 29 agents identified from voice engagement history (last 2 weeks) + 3 admin-only licenses identified from queue configuration and Zoom user profiles. To get direct agent profiles and email addresses, add the <code style="background:rgba(37,99,235,0.08);padding:1px 5px;border-radius:3px;font-size:12px">contact_center:read:list_users:admin</code> scope to the Zoom OAuth app.
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════ SETTINGS PAGE ════════════ -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <div>
+          <h2>Settings</h2>
+          <p>Manage managers list and dashboard preferences</p>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Departments</h3>
+        <p>Departments are shared across Zoom Phone and Contact Center. They appear in dropdown filters and assignment columns on both pages.</p>
+
+        <div class="manager-list" id="cc-dept-list"></div>
+
+        <div class="add-manager-form" style="grid-template-columns:1fr auto">
+          <div class="form-group">
+            <label>Department Name</label>
+            <input type="text" class="form-input" id="new-cc-dept" placeholder="e.g., Billing, Referrals, Call Center">
+          </div>
+          <button class="btn-primary" onclick="addCCDept()" style="align-self:end">Add Department</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Manager Directory</h3>
+        <p>Managers are shared across Zoom Phone and Contact Center. They appear in the manager assignment dropdowns on both pages.</p>
+
+        <div class="manager-list" id="manager-list"></div>
+
+        <div class="add-manager-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" class="form-input" id="new-mgr-name" placeholder="e.g., Sergio Garcia">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-input" id="new-mgr-email" placeholder="e.g., sergio@associatesmd.com">
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <input type="text" class="form-input" id="new-mgr-dept" placeholder="e.g., Operations">
+          </div>
+          <button class="btn-primary" onclick="addManager()" style="align-self:end">Add Manager</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Quick Import</h3>
+        <p>Auto-detect managers from Zoom Phone user profiles and add them to the directory.</p>
+        <button class="btn-secondary" onclick="importManagersFromZoom()">Import from Zoom Data</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>Export / Backup</h3>
+        <p>Download your dashboard settings, manager list, and assignments as JSON.</p>
+        <button class="btn-secondary" onclick="exportSettings()">Export Settings</button>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Phone User Data ──
+const phoneUsers = [
+  { name:"Ned James", email:"ned.james@associatesmd.com", ext:3553, phone:"+19546150918", status:"active", dept:"Office Manager", title:"Davie Office Manager", manager:"sergio@associatesmd.com", site:"Davie Clinic" },
+  { name:"Chastity Leak", email:"chastity.leak@associatesmd.com", ext:2216, phone:"+19546519812", status:"active", dept:"N/A", title:"Case Manager", manager:"", site:"Remote Workers" },
+  { name:"Milemnia Rodriguez", email:"milemnia.rodriguez@associatesmd.com", ext:2212, phone:"+19547155856", status:"active", dept:"Call Center", title:"Call Center Agent", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
+  { name:"Katherine Coyne", email:"kcoyne@associatesmd.com", ext:2211, phone:"+19547516051", status:"active", dept:"Billing", title:"Patient Collector", manager:"lucas@associatesmd.com", site:"Remote Workers" },
+  { name:"Miranda Ortiz", email:"miranda.ortiz@associatesmd.com", ext:2210, phone:"+19543384190", status:"active", dept:"Billing", title:"Medical Records Clerk - Revenue Cycle", manager:"lucas@associatesmd.com", site:"Remote Workers" },
+  { name:"Krystelle Dioneza", email:"krystelle.dioneza@associatesmd.com", ext:2209, phone:"+19543535234", status:"active", dept:"Prescriptions", title:"Prescription Refill Agent", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
+  { name:"Dominic Baguio", email:"dominic.baguio@associatesmd.com", ext:2208, phone:"+19546394601", status:"active", dept:"Prescriptions Lead", title:"Medication Management Supervisor", manager:"", site:"Remote Workers" },
+  { name:"Freddy Clavijo", email:"freddy.clavijo@associatesmd.com", ext:2207, phone:"+19542567135", status:"active", dept:"Remote Workers", title:"Remote Medical Assistant", manager:"gisself.diaz@associatesmd.com", site:"Remote Workers" },
+  { name:"Gisself Diaz", email:"gisself.diaz@associatesmd.com", ext:2205, phone:"+19545147817", status:"active", dept:"Remote Clinical", title:"Remote Clinical Supervisor", manager:"felix@associatesmd.com", site:"Remote Workers" },
+  { name:"Rhayner Hidalgo", email:"rhayner.hidalgo@associatesmd.com", ext:2204, phone:"+19548873453", status:"active", dept:"Remote Workers", title:"Virtual Medical Assistant", manager:"felix@associatesmd.com", site:"Remote Workers" },
+  { name:"Wolfang Lagos", email:"wolfang.lagos@associatesmd.com", ext:2203, phone:"+19542792572", status:"active", dept:"Remote Workers", title:"Remote Medical Assistant", manager:"felix@associatesmd.com", site:"Remote Workers" },
+  { name:"Cybil Quijote", email:"cybil.quijote@associatesmd.com", ext:2202, phone:"+19546175012", status:"active", dept:"Refill Department", title:"Medication Management Coordinator", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
+  { name:"Maciel Lantigua", email:"maciel.lantigua@associatesmd.com", ext:1671, phone:"", status:"active", dept:"Billing/ Revenue Cycle", title:"Patient Collections Agent", manager:"lucas@associatesmd.com", site:"Corporate" },
+  { name:"Denise Capalar", email:"denise.capalar@associatesmd.com", ext:1666, phone:"+19546668422", status:"active", dept:"Refill Department", title:"Medication Management Coordinator", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
+  { name:"Jude Duron", email:"jude.duron@associatesmd.com", ext:1665, phone:"+19543385526", status:"active", dept:"HR", title:"Staff Recruiter", manager:"venessa@associatesmd.com", site:"Corporate" },
+  { name:"Bryan Aparicio", email:"bryan.aparicio@associatesmd.com", ext:1664, phone:"+19546150835", status:"active", dept:"VIP Concierge", title:"Concierge Health Assistant", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
+  { name:"Estephani Sanchez", email:"estephani.sanchez@associatesmd.com", ext:1663, phone:"+19544081492", status:"active", dept:"VIP Concierge", title:"Concierge Health Assistant", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
+  { name:"Carlos Molina", email:"Carlos@AssociatesMD.com", ext:1620, phone:"+19546150828", status:"active", dept:"Corporate", title:"Chief Technology Officer", manager:"", site:"Corporate" },
+  { name:"Esther Ramdin", email:"esther.ramdin@associatesmd.com", ext:1616, phone:"+19542848016", status:"active", dept:"Corporate", title:"Businesss Office Manager", manager:"sergio@associatesmd.com", site:"Corporate" },
+  { name:"Sharee Bedassee", email:"sharee.bedassee@associatesmd.com", ext:1572, phone:"+19543766741", status:"active", dept:"Operations", title:"Operations Manager", manager:"sergio@associatesmd.com", site:"Corporate" },
+  { name:"Saul Soto", email:"saul.soto@associatesmd.com", ext:1530, phone:"+19546408936", status:"active", dept:"IT", title:"Systems Administrator", manager:"Carlos@AssociatesMD.com", site:"Corporate" },
+  { name:"Michell Llovet", email:"mllovet@associatesmd.com", ext:1522, phone:"+19544295574", status:"active", dept:"Diet", title:"Nutrition Coach", manager:"Carissa@associatesmd.com", site:"Corporate" },
+  { name:"Nathali Fierro", email:"nathali.fierro@associatesmd.com", ext:1521, phone:"+19546150494", status:"active", dept:"Corporate", title:"Credentialing Specialist", manager:"chloe@associatesmd.com", site:"Corporate" },
+  { name:"Spencer Hastings", email:"spencer@associatesmd.com", ext:1504, phone:"+19543616806", status:"active", dept:"Corporate", title:"Chief Financial Officer", manager:"", site:"Corporate" },
+  { name:"Niquea Eason", email:"niquea.eason@associatesmd.com", ext:1186, phone:"+19543384186", status:"active", dept:"Call Center", title:"Sr. Director Patient Experience", manager:"sergio@associatesmd.com", site:"Corporate" },
+  { name:"Venessa Henry", email:"venessa@associatesmd.com", ext:1158, phone:"+19546150833", status:"active", dept:"Corporate", title:"VP of Human Resources", manager:"spencer@associatesmd.com", site:"Corporate" },
+  { name:"Doris Carrillos", email:"doris@associatesmd.com", ext:1102, phone:"+19547155878", status:"active", dept:"Office Manager", title:"PI office manager", manager:"sergio@associatesmd.com", site:"Pine Island" },
+  { name:"Carissa Vega", email:"Carissa@associatesmd.com", ext:1060, phone:"+19545773249", status:"active", dept:"Diet", title:"Dietitian", manager:"sergio@associatesmd.com", site:"Corporate" }
+];
+
+// ── Contact Center Data ──
+const ccQueues = [
+  { name:"Patient Feedback Fix", channel:"voice", agents:1, supervisors:0, status:"active", modified:"2026-03-17" },
+  { name:"Outreach Outbound (DO NOT USE)", channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"2025-10-07" },
+  { name:"Billing Spa", channel:"voice", agents:3, supervisors:1, status:"active", modified:"2026-01-09" },
+  { name:"Medical Records Spa", channel:"voice", agents:3, supervisors:1, status:"active", modified:"2025-07-10" },
+  { name:"Spanish General Inquiries", channel:"voice", agents:10, supervisors:4, status:"active", modified:"2025-10-31" },
+  { name:"Spanish Appointments", channel:"voice", agents:10, supervisors:4, status:"active", modified:"2025-07-10" },
+  { name:"Outreach (DO NOT USE)", channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"2025-10-07" },
+  { name:"Billing Eng", channel:"voice", agents:4, supervisors:1, status:"active", modified:"2026-01-09" },
+  { name:"Medical Records Eng", channel:"voice", agents:3, supervisors:1, status:"active", modified:"2025-07-10" },
+  { name:"English General Inquiries", channel:"voice", agents:16, supervisors:4, status:"active", modified:"2025-07-21" },
+  { name:"English Appointments", channel:"voice", agents:16, supervisors:4, status:"active", modified:"2025-10-21" },
+  { name:"New Patient Spanish", channel:"voice", agents:12, supervisors:4, status:"active", modified:"2025-07-10" },
+  { name:"New Patient English", channel:"voice", agents:16, supervisors:4, status:"active", modified:"2025-07-10" },
+  { name:"Referrals Spa", channel:"voice", agents:7, supervisors:1, status:"active", modified:"2026-01-09" },
+  { name:"Referrals Eng", channel:"voice", agents:7, supervisors:1, status:"active", modified:"2026-01-09" },
+  { name:"Demo", channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"2025-06-17" }
+];
+
+const ccAgents = [
+  { name:"Abraham Yen Ubri", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","New Patient Spanish","Referrals Eng","Referrals Spa","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Ajah Angus", queues:["Billing Eng"] },
+  { name:"Andrea Ardon", queues:["Referrals Eng"] },
+  { name:"Angelica Fe Bapilar", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","Referrals Eng","Referrals Spa"] },
+  { name:"Bryan Aparicio", queues:["English Appointments","English General Inquiries","New Patient English","Referrals Eng"] },
+  { name:"Carlos Reina", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","New Patient Spanish","Referrals Eng","Referrals Spa","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Cielo Logrono", queues:["English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","Referrals Eng","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Dania de los Santos", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","New Patient Spanish","Referrals Spa","Spanish Appointments"] },
+  { name:"Daniela D'Armas", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","Referrals Eng","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Davianny Semprun", queues:["Billing Eng","English Appointments","English General Inquiries","New Patient English","New Patient Spanish","Referrals Eng","Referrals Spa","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Franklin Suarez", queues:["Billing Eng","Billing Spa","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","New Patient Spanish","Referrals Eng","Referrals Spa","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Gloria Moreno", queues:["Billing Eng","Billing Spa","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","Referrals Eng","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Gregoris Manzueta", queues:["Billing Eng","English Appointments","English General Inquiries","Referrals Eng","Referrals Spa","Spanish Appointments"] },
+  { name:"Hanameel Del Rosario Mateo", queues:["Billing Eng","Billing Spa","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","New Patient Spanish","Referrals Eng","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Jose Rafael Delgado", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","New Patient Spanish","Referrals Eng","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Joseling Lagos", queues:["English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","Referrals Eng","Referrals Spa","Spanish Appointments"] },
+  { name:"Karen Anne Costes", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","Referrals Eng","Referrals Spa"] },
+  { name:"Leslie Mejia Ramirez", queues:["English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","New Patient Spanish","Referrals Eng","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Linda Zephirin", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English"] },
+  { name:"Maria U", queues:["English Appointments","English General Inquiries","Medical Records Eng","New Patient English","Referrals Eng","Referrals Spa","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Micole Acosta", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","New Patient Spanish","Referrals Eng"] },
+  { name:"Patricia Menendez", queues:["Billing Eng"] },
+  { name:"Reynaldo Medina", queues:["English Appointments","English General Inquiries","Medical Records Eng","Referrals Eng","Referrals Spa"] },
+  { name:"Robin Amancio", queues:["Billing Eng","Billing Spa","English Appointments","English General Inquiries","Medical Records Eng","Medical Records Spa","New Patient English","Spanish Appointments"] },
+  { name:"Ryan Lipardo", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","Referrals Eng","Spanish General Inquiries"] },
+  { name:"Sebastian Azuaje", queues:["Billing Spa","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","New Patient Spanish","Referrals Eng","Referrals Spa","Spanish Appointments","Spanish General Inquiries"] },
+  { name:"Valentina Meza Vives", queues:["Billing Eng","English Appointments","English General Inquiries","Medical Records Eng","New Patient English","New Patient Spanish","Referrals Eng"] },
+  { name:"Yasmin Velazquez Martinez", queues:["Billing Eng","English Appointments","English General Inquiries","Referrals Eng","Referrals Spa"] },
+  { name:"Yvonne Beato", queues:["Billing Eng","Billing Spa"] }
+];
+
+const ccAdmins = [
+  { name:"Contact Admin", email:"contactadmin@associatesmd.com", role:"Admin", lastLogin:"2026-03-27", note:"CC admin service account" },
+  { name:"Niquea Eason", email:"niquea.eason@associatesmd.com", role:"Admin", lastLogin:"2026-03-24", note:"Sr. Director Patient Experience (also has Phone license)" },
+  { name:"Mark \"MC\" Cabusao", email:"mcabusao@associatesmd.com", role:"Admin", lastLogin:"N/A", note:"CC setup/configuration admin" }
+];
+
+// ── Number Allocation ──
+const numberAllocation = {
+  users: 27, commonArea: 49, autoReceptionist: 35,
+  callQueue: 2, emergencyPool: 7, unassigned: 177
+};
+
+// ── Usage Data (last 30 days, from Zoom APIs) ──
+const phoneUsage = [
+  { name:"Freddy Clavijo", calls:553, inbound:120, outbound:433, totalMinutes:1380 },
+  { name:"Doris Carrillos", calls:376, inbound:150, outbound:226, totalMinutes:201 },
+  { name:"Gisself Diaz", calls:369, inbound:71, outbound:298, totalMinutes:1232 },
+  { name:"Wolfang Lagos", calls:201, inbound:52, outbound:149, totalMinutes:460 },
+  { name:"Ned James", calls:200, inbound:59, outbound:141, totalMinutes:272 },
+  { name:"Miranda Ortiz", calls:192, inbound:192, outbound:0, totalMinutes:17 },
+  { name:"Niquea Eason", calls:179, inbound:178, outbound:1, totalMinutes:190 },
+  { name:"Estephani Sanchez", calls:175, inbound:167, outbound:8, totalMinutes:470 },
+  { name:"Carissa Vega", calls:163, inbound:162, outbound:1, totalMinutes:134 },
+  { name:"Bryan Aparicio", calls:149, inbound:140, outbound:9, totalMinutes:407 },
+  { name:"Venessa Henry", calls:77, inbound:44, outbound:33, totalMinutes:302 },
+  { name:"Katherine Coyne", calls:40, inbound:31, outbound:9, totalMinutes:307 },
+  { name:"Nathali Fierro", calls:13, inbound:12, outbound:1, totalMinutes:59 },
+  { name:"Spencer Hastings", calls:13, inbound:13, outbound:0, totalMinutes:0 },
+  { name:"Jude Duron", calls:11, inbound:11, outbound:0, totalMinutes:0 },
+  { name:"Carlos Molina", calls:11, inbound:6, outbound:5, totalMinutes:3 },
+  { name:"Sharee Bedassee", calls:8, inbound:7, outbound:1, totalMinutes:0 },
+  { name:"Chastity Leak", calls:7, inbound:4, outbound:3, totalMinutes:5 },
+  { name:"Saul Soto", calls:6, inbound:4, outbound:2, totalMinutes:6 },
+  { name:"Esther Ramdin", calls:5, inbound:5, outbound:0, totalMinutes:14 },
+  { name:"Milemnia Rodriguez", calls:1, inbound:1, outbound:0, totalMinutes:1 },
+  { name:"Rhayner Hidalgo", calls:1, inbound:1, outbound:0, totalMinutes:0 }
+];
+
+const ccUsage = [
+  { name:"Daniela D'Armas", engagements:2828, totalMinutes:5994, avgWaitSec:6 },
+  { name:"Dania de los Santos", engagements:2137, totalMinutes:4838, avgWaitSec:4 },
+  { name:"Carlos Reina", engagements:1612, totalMinutes:5731, avgWaitSec:10 },
+  { name:"Sebastian Azuaje", engagements:1590, totalMinutes:5450, avgWaitSec:13 },
+  { name:"Franklin Suarez", engagements:1573, totalMinutes:7176, avgWaitSec:13 },
+  { name:"Abraham Yen Ubri", engagements:1498, totalMinutes:7299, avgWaitSec:10 },
+  { name:"Micole Acosta", engagements:1472, totalMinutes:6378, avgWaitSec:11 },
+  { name:"Davianny Semprun", engagements:1429, totalMinutes:5766, avgWaitSec:14 },
+  { name:"Hanameel Del Rosario Mateo", engagements:1412, totalMinutes:5299, avgWaitSec:12 },
+  { name:"Niquea Eason", engagements:1209, totalMinutes:2095, avgWaitSec:6 },
+  { name:"Ryan Lipardo", engagements:1142, totalMinutes:7110, avgWaitSec:9 },
+  { name:"Angelica Fe Bapilar", engagements:1112, totalMinutes:5638, avgWaitSec:10 },
+  { name:"Jose Rafael Delgado", engagements:1094, totalMinutes:4177, avgWaitSec:10 },
+  { name:"Maria U", engagements:1035, totalMinutes:5514, avgWaitSec:45 },
+  { name:"Karen Anne Costes", engagements:982, totalMinutes:7244, avgWaitSec:9 },
+  { name:"Gregoris Manzueta", engagements:799, totalMinutes:5155, avgWaitSec:52 },
+  { name:"Leslie Mejia Ramirez", engagements:618, totalMinutes:2509, avgWaitSec:9 },
+  { name:"Gloria Moreno", engagements:587, totalMinutes:3745, avgWaitSec:23 },
+  { name:"Robin Amancio", engagements:577, totalMinutes:2569, avgWaitSec:15 },
+  { name:"Cielo Logrono", engagements:527, totalMinutes:2121, avgWaitSec:10 },
+  { name:"Linda Zephirin", engagements:523, totalMinutes:3024, avgWaitSec:18 },
+  { name:"Reynaldo Medina", engagements:391, totalMinutes:2626, avgWaitSec:33 },
+  { name:"Valentina Meza Vives", engagements:171, totalMinutes:1170, avgWaitSec:4 },
+  { name:"Kelly Rodriguez", engagements:144, totalMinutes:694, avgWaitSec:39 },
+  { name:"Joseling Lagos", engagements:100, totalMinutes:1237, avgWaitSec:34 },
+  { name:"Yasmin Velazquez Martinez", engagements:98, totalMinutes:990, avgWaitSec:28 },
+  { name:"Bryan Aparicio", engagements:82, totalMinutes:431, avgWaitSec:53 },
+  { name:"Andrea Ardon", engagements:67, totalMinutes:831, avgWaitSec:9 },
+  { name:"Yvonne Beato", engagements:59, totalMinutes:288, avgWaitSec:25 },
+  { name:"Ajah Angus", engagements:50, totalMinutes:291, avgWaitSec:16 },
+  { name:"Patricia Menendez", engagements:43, totalMinutes:369, avgWaitSec:0 },
+  { name:"Novie Agub", engagements:9, totalMinutes:150, avgWaitSec:8 }
+];
+
+const siteDistribution = {};
+phoneUsers.forEach(u => { siteDistribution[u.site] = (siteDistribution[u.site] || 0) + 1; });
+
+// ── State ──
+const STORAGE_KEY = 'zoom-dashboard';
+function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function getManagers() { return loadState().managers || []; }
+function setManagers(list) { const s = loadState(); s.managers = list; saveState(s); }
+function getUserAssignments() { return loadState().assignments || {}; }
+function setUserAssignment(email, managerName) { const s = loadState(); if (!s.assignments) s.assignments = {}; s.assignments[email] = managerName; saveState(s); }
+
+// CC state helpers
+function getCCDepts() { return loadState().ccDepts || []; }
+function setCCDepts(list) { const s = loadState(); s.ccDepts = list; saveState(s); }
+
+function getCCAssignments() { return loadState().ccAssignments || {}; }
+function setCCAssignment(agentName, field, value) {
+  const s = loadState();
+  if (!s.ccAssignments) s.ccAssignments = {};
+  if (!s.ccAssignments[agentName]) s.ccAssignments[agentName] = {};
+  s.ccAssignments[agentName][field] = value;
+  saveState(s);
+}
+
+// ── Toast ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>' + msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Navigation ──
+document.querySelectorAll('.sidebar-nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const page = a.dataset.page;
+    document.querySelectorAll('.sidebar-nav a').forEach(n => n.classList.remove('active'));
+    a.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+  });
+});
+
+// ── Dashboard ──
+function renderDashboard() {
+  document.getElementById('kpi-common-area').textContent = numberAllocation.commonArea;
+  document.getElementById('kpi-cc-agents').textContent = ccAgents.length + ccAdmins.length;
+
+  // CC KPIs
+  const activeCC = ccQueues.filter(q => q.status === 'active');
+  document.getElementById('cc-active-queues').textContent = activeCC.length;
+  document.getElementById('cc-total-supervisors').textContent = activeCC.reduce((s,q) => s + q.supervisors, 0);
+  document.getElementById('cc-agent-count').textContent = ccAgents.length;
+  const avgQ = (ccAgents.reduce((s,a) => s + a.queues.length, 0) / ccAgents.length).toFixed(1);
+  document.getElementById('cc-avg-queues').textContent = avgQ;
+
+  // Phone Usage table
+  const phoneMax = phoneUsage.length > 0 ? phoneUsage[0].calls : 1;
+  document.getElementById('phone-usage-tbody').innerHTML = phoneUsage.map(u => {
+    const barPct = Math.max((u.calls / phoneMax) * 100, 2);
+    const hrs = Math.floor(u.totalMinutes / 60);
+    const mins = u.totalMinutes % 60;
+    const time = hrs > 0 ? hrs + 'h ' + mins + 'm' : mins + 'm';
+    return `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar ${getAvatarClass(u.name)}">${getInitials(u.name)}</div>
+            <div class="user-name" style="font-size:13px;font-weight:500">${u.name}</div>
+          </div>
+        </td>
+        <td style="font-weight:600;font-variant-numeric:tabular-nums">${u.calls.toLocaleString()}</td>
+        <td style="font-variant-numeric:tabular-nums;color:var(--accent-teal);font-size:12px">${u.inbound.toLocaleString()}</td>
+        <td style="font-variant-numeric:tabular-nums;color:var(--accent-blue);font-size:12px">${u.outbound.toLocaleString()}</td>
+        <td style="font-size:12px;color:var(--text-secondary)">${time}</td>
+        <td style="width:120px"><div class="site-bar" style="margin:0"><div class="site-bar-fill" style="width:${barPct}%"></div></div></td>
+      </tr>`;
+  }).join('');
+
+  // CC Usage table
+  const ccMax = ccUsage.length > 0 ? ccUsage[0].engagements : 1;
+  document.getElementById('cc-usage-tbody').innerHTML = ccUsage.map(u => {
+    const barPct = Math.max((u.engagements / ccMax) * 100, 2);
+    const hrs = Math.floor(u.totalMinutes / 60);
+    const mins = u.totalMinutes % 60;
+    const time = hrs > 0 ? hrs + 'h ' + mins + 'm' : mins + 'm';
+    const wait = u.avgWaitSec < 60 ? u.avgWaitSec + 's' : Math.floor(u.avgWaitSec / 60) + 'm ' + (u.avgWaitSec % 60) + 's';
+    return `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar ${getAvatarClass(u.name)}">${getInitials(u.name)}</div>
+            <div class="user-name" style="font-size:13px;font-weight:500">${u.name}</div>
+          </div>
+        </td>
+        <td style="font-weight:600;font-variant-numeric:tabular-nums">${u.engagements.toLocaleString()}</td>
+        <td style="font-size:12px;color:var(--text-secondary)">${time}</td>
+        <td style="font-size:12px;color:var(--text-muted)">${wait}</td>
+        <td style="width:120px"><div class="site-bar" style="margin:0"><div class="site-bar-fill" style="width:${barPct}%;background:var(--accent-blue)"></div></div></td>
+      </tr>`;
+  }).join('');
+
+  // Site Distribution
+  const siteGrid = document.getElementById('site-grid');
+  const maxCount = Math.max(...Object.values(siteDistribution));
+  siteGrid.innerHTML = Object.entries(siteDistribution)
+    .sort((a, b) => b[1] - a[1])
+    .map(([site, count]) => `
+      <div class="site-item">
+        <div class="site-item-name">${site}</div>
+        <div class="site-item-count">${count}</div>
+        <div class="site-item-label">user${count !== 1 ? 's' : ''}</div>
+        <div class="site-bar"><div class="site-bar-fill" style="width:${(count/maxCount)*100}%"></div></div>
+      </div>
+    `).join('');
+}
+
+// ── Phone Users ──
+function getAvatarClass(name) {
+  const classes = ['a','b','c','d','e'];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return classes[Math.abs(hash) % classes.length];
+}
+function getInitials(name) {
+  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+}
+
+function renderPhoneUsers(filtered) {
+  const users = filtered || phoneUsers;
+  const assignments = getUserAssignments();
+  const managers = getManagers();
+  const tbody = document.getElementById('phone-users-tbody');
+
+  tbody.innerHTML = users.map(u => {
+    const assigned = assignments[u.email] || '';
+    const hasValue = assigned ? 'has-value' : '';
+    const managerOptions = managers.map(m =>
+      `<option value="${m.name}" ${assigned === m.name ? 'selected' : ''}>${m.name}</option>`
+    ).join('');
+    return `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar ${getAvatarClass(u.name)}">${getInitials(u.name)}</div>
+            <div class="user-info">
+              <div class="user-name">${u.name}</div>
+              <div class="user-email">${u.email}</div>
+            </div>
+          </div>
+        </td>
+        <td style="font-variant-numeric:tabular-nums;color:var(--text-secondary)">${u.ext}</td>
+        <td><span style="color:var(--text-secondary);font-size:12px">${u.dept}</span></td>
+        <td><span class="badge badge-site">${u.site}</span></td>
+        <td><span class="badge badge-active">Active</span></td>
+        <td>
+          <select class="manager-select ${hasValue}" data-user-email="${u.email}" onchange="onManagerChange(this)">
+            <option value="">-- Assign --</option>
+            ${managerOptions}
+          </select>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function onManagerChange(sel) {
+  setUserAssignment(sel.dataset.userEmail, sel.value);
+  sel.classList.toggle('has-value', !!sel.value);
+  showToast('Manager updated');
+}
+
+function filterUsers() {
+  const search = document.getElementById('user-search').value.toLowerCase();
+  const site = document.getElementById('site-filter').value;
+  const dept = document.getElementById('dept-filter').value;
+  const mgr = document.getElementById('manager-filter').value;
+  const assignments = getUserAssignments();
+  const filtered = phoneUsers.filter(u => {
+    const matchSearch = !search || u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search) || u.dept.toLowerCase().includes(search);
+    const matchSite = !site || u.site === site;
+    const matchDept = !dept || u.dept === dept;
+    const matchMgr = !mgr || (mgr === '__none__' ? !assignments[u.email] : assignments[u.email] === mgr);
+    return matchSearch && matchSite && matchDept && matchMgr;
+  });
+  renderPhoneUsers(filtered);
+}
+
+function populateFilters() {
+  const sites = [...new Set(phoneUsers.map(u => u.site))].sort();
+  const depts = [...new Set(phoneUsers.map(u => u.dept))].sort();
+  const siteFilter = document.getElementById('site-filter');
+  sites.forEach(s => { const o = document.createElement('option'); o.value = s; o.textContent = s; siteFilter.appendChild(o); });
+  const deptFilter = document.getElementById('dept-filter');
+  depts.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; deptFilter.appendChild(o); });
+  updateManagerFilter();
+
+  // CC queue filter
+  const queueFilter = document.getElementById('cc-queue-filter');
+  const activeQueues = ccQueues.filter(q => q.status === 'active').map(q => q.name).sort();
+  activeQueues.forEach(q => { const o = document.createElement('option'); o.value = q; o.textContent = q; queueFilter.appendChild(o); });
+}
+
+function updateManagerFilter() {
+  const managers = getManagers();
+  const mgrFilter = document.getElementById('manager-filter');
+  const current = mgrFilter.value;
+  mgrFilter.innerHTML = '<option value="">All Managers</option><option value="__none__">Unassigned</option>';
+  managers.forEach(m => { const o = document.createElement('option'); o.value = m.name; o.textContent = m.name; mgrFilter.appendChild(o); });
+  mgrFilter.value = current;
+}
+
+// ── Contact Center ──
+function switchCCTab(tab) {
+  document.querySelectorAll('.cc-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.cc-tab-content').forEach(c => c.classList.toggle('active', c.id === 'cc-tab-' + tab));
+}
+
+function renderCCAdmins() {
+  const tbody = document.getElementById('cc-admins-tbody');
+  tbody.innerHTML = ccAdmins.map(a => `
+    <tr>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar ${getAvatarClass(a.name)}">${getInitials(a.name)}</div>
+          <div class="user-info">
+            <div class="user-name">${a.name}</div>
+            <div class="user-email">Admin-only license</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-size:12px;color:var(--text-secondary)">${a.email}</td>
+      <td><span class="badge" style="background:var(--accent-violet-dim);color:var(--accent-violet)">${a.role}</span></td>
+      <td style="font-size:12px;color:var(--text-muted)">${a.lastLogin}</td>
+      <td style="font-size:12px;color:var(--text-secondary)">${a.note}</td>
+    </tr>
+  `).join('');
+}
+
+function renderCCAgents(filtered) {
+  const agents = filtered || ccAgents;
+  const ccAssigns = getCCAssignments();
+  const depts = getCCDepts();
+  const mgrs = getManagers();
+  const tbody = document.getElementById('cc-agents-tbody');
+  tbody.innerHTML = agents.map(a => {
+    const assign = ccAssigns[a.name] || {};
+    const maxShow = 3;
+    const shown = a.queues.slice(0, maxShow);
+    const overflow = a.queues.length - maxShow;
+    const tags = shown.map(q => `<span class="queue-tag">${q}</span>`).join('');
+    const overflowTag = overflow > 0 ? `<span class="queue-tag overflow">+${overflow} more</span>` : '';
+
+    const deptOptions = depts.map(d =>
+      `<option value="${d}" ${assign.dept === d ? 'selected' : ''}>${d}</option>`
+    ).join('');
+    const mgrOptions = mgrs.map(m =>
+      `<option value="${m.name}" ${assign.manager === m.name ? 'selected' : ''}>${m.name}</option>`
+    ).join('');
+
+    const deptHasVal = assign.dept ? 'has-value' : '';
+    const mgrHasVal = assign.manager ? 'has-value' : '';
+
+    return `
+      <tr>
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar ${getAvatarClass(a.name)}">${getInitials(a.name)}</div>
+            <div class="user-info">
+              <div class="user-name">${a.name}</div>
+              <div class="user-email">Contact Center Agent</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <select class="manager-select ${deptHasVal}" data-agent="${a.name}" data-field="dept" onchange="onCCAssignChange(this)">
+            <option value="">-- Dept --</option>
+            ${deptOptions}
+          </select>
+        </td>
+        <td>
+          <select class="manager-select ${mgrHasVal}" data-agent="${a.name}" data-field="manager" onchange="onCCAssignChange(this)">
+            <option value="">-- Manager --</option>
+            ${mgrOptions}
+          </select>
+        </td>
+        <td style="font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent-teal)">${a.queues.length}</td>
+        <td><div class="queue-tags">${tags}${overflowTag}</div></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function onCCAssignChange(sel) {
+  const agent = sel.dataset.agent;
+  const field = sel.dataset.field;
+  setCCAssignment(agent, field, sel.value);
+  sel.classList.toggle('has-value', !!sel.value);
+  showToast(field === 'dept' ? 'Department updated' : 'Manager updated');
+}
+
+function saveCCAssignments() { showToast('All CC assignments saved'); }
+
+function filterCCAgents() {
+  const search = document.getElementById('cc-agent-search').value.toLowerCase();
+  const queue = document.getElementById('cc-queue-filter').value;
+  const deptF = document.getElementById('cc-dept-filter').value;
+  const mgrF = document.getElementById('cc-mgr-filter').value;
+  const ccAssigns = getCCAssignments();
+  const filtered = ccAgents.filter(a => {
+    const assign = ccAssigns[a.name] || {};
+    const matchSearch = !search || a.name.toLowerCase().includes(search);
+    const matchQueue = !queue || a.queues.includes(queue);
+    const matchDept = !deptF || assign.dept === deptF;
+    const matchMgr = !mgrF || (mgrF === '__none__' ? !assign.manager : assign.manager === mgrF);
+    return matchSearch && matchQueue && matchDept && matchMgr;
+  });
+  renderCCAgents(filtered);
+}
+
+function renderCCQueues(filtered) {
+  const queues = filtered || ccQueues.filter(q => q.status === 'active');
+  const tbody = document.getElementById('cc-queues-tbody');
+  tbody.innerHTML = queues.map(q => {
+    const isInactive = q.status === 'inactive';
+    const statusBadge = isInactive
+      ? '<span class="badge" style="background:var(--accent-rose-dim);color:var(--accent-rose)">Inactive</span>'
+      : '<span class="badge badge-active">Active</span>';
+    return `
+      <tr style="${isInactive ? 'opacity:0.5' : ''}">
+        <td>
+          <div class="user-cell">
+            <div class="user-avatar ${getAvatarClass(q.name)}" style="border-radius:7px">${q.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
+            <div class="user-info">
+              <div class="user-name">${q.name}</div>
+              <div class="user-email">${q.channel} queue</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge" style="background:var(--accent-blue-dim);color:var(--accent-blue)">Voice</span></td>
+        <td style="font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent-teal)">${q.agents}</td>
+        <td style="font-variant-numeric:tabular-nums;color:var(--text-secondary)">${q.supervisors}</td>
+        <td>${statusBadge}</td>
+        <td style="font-size:12px;color:var(--text-muted)">${q.modified}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterCCQueues() {
+  const search = document.getElementById('cc-search').value.toLowerCase();
+  const statusVal = document.getElementById('cc-status-filter').value;
+  const filtered = ccQueues.filter(q => {
+    const matchSearch = !search || q.name.toLowerCase().includes(search);
+    const matchStatus = !statusVal || q.status === statusVal;
+    return matchSearch && matchStatus;
+  });
+  renderCCQueues(filtered);
+}
+
+// ── Exports ──
+function exportCCCSV() {
+  const ccAssigns = getCCAssignments();
+  const rows = [['Name','Type','Department','Manager','Queues Count','Queue Names / Note']];
+  ccAgents.forEach(a => {
+    const assign = ccAssigns[a.name] || {};
+    rows.push([a.name, 'Agent', assign.dept || '', assign.manager || '', a.queues.length, a.queues.join('; ')]);
+  });
+  ccAdmins.forEach(a => { rows.push([a.name, 'Admin', '', '', 0, a.note + ' — ' + a.email]); });
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'zoom_cc_agents_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CC agents exported');
+}
+
+function saveAllManagers() { showToast('All assignments saved'); }
+
+function exportCSV() {
+  const assignments = getUserAssignments();
+  const rows = [['Name','Email','Extension','Department','Site','Status','Manager']];
+  phoneUsers.forEach(u => { rows.push([u.name, u.email, u.ext, u.dept, u.site, 'Active', assignments[u.email] || 'Unassigned']); });
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'zoom_phone_users_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV exported');
+}
+
+function exportSettings() {
+  const state = loadState();
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'zoom_dashboard_settings.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Settings exported');
+}
+
+// ── Settings ──
+function renderManagerList() {
+  const managers = getManagers();
+  const list = document.getElementById('manager-list');
+  if (managers.length === 0) {
+    list.innerHTML = '<div class="empty-state" style="padding:24px"><p>No managers added yet. Add one below or import from Zoom data.</p></div>';
+    return;
+  }
+  list.innerHTML = managers.map((m, i) => `
+    <div class="manager-row">
+      <div class="user-avatar ${getAvatarClass(m.name)}" style="width:28px;height:28px;font-size:10px">${getInitials(m.name)}</div>
+      <div class="manager-name">${m.name}</div>
+      <div class="manager-email">${m.email || '\u2014'}</div>
+      <div class="manager-dept">${m.department || '\u2014'}</div>
+      <button class="btn-remove" onclick="removeManager(${i})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addManager() {
+  const name = document.getElementById('new-mgr-name').value.trim();
+  const email = document.getElementById('new-mgr-email').value.trim();
+  const dept = document.getElementById('new-mgr-dept').value.trim();
+  if (!name) { showToast('Name is required'); return; }
+  const managers = getManagers();
+  if (managers.some(m => m.name.toLowerCase() === name.toLowerCase())) { showToast('Manager already exists'); return; }
+  managers.push({ name, email, department: dept });
+  setManagers(managers);
+  document.getElementById('new-mgr-name').value = '';
+  document.getElementById('new-mgr-email').value = '';
+  document.getElementById('new-mgr-dept').value = '';
+  renderManagerList();
+  updateManagerFilter();
+  updateCCFilters();
+  renderPhoneUsers();
+  renderCCAgents();
+  showToast('Manager added');
+}
+
+function removeManager(index) {
+  const managers = getManagers();
+  const removed = managers.splice(index, 1)[0];
+  setManagers(managers);
+  const state = loadState();
+  if (state.assignments) {
+    Object.keys(state.assignments).forEach(email => {
+      if (state.assignments[email] === removed.name) delete state.assignments[email];
+    });
+  }
+  // Also clean up CC assignments referencing this manager
+  if (state.ccAssignments) {
+    Object.keys(state.ccAssignments).forEach(agent => {
+      if (state.ccAssignments[agent].manager === removed.name) state.ccAssignments[agent].manager = '';
+    });
+  }
+  saveState(state);
+  renderManagerList();
+  updateManagerFilter();
+  updateCCFilters();
+  renderPhoneUsers();
+  renderCCAgents();
+  showToast('Manager removed');
+}
+
+function importManagersFromZoom() {
+  const managerEmails = [...new Set(phoneUsers.map(u => u.manager).filter(Boolean))];
+  const existing = getManagers();
+  const existingEmails = new Set(existing.map(m => m.email?.toLowerCase()));
+  let added = 0;
+  const emailToUser = {};
+  phoneUsers.forEach(u => { emailToUser[u.email.toLowerCase()] = u; });
+  managerEmails.forEach(email => {
+    if (existingEmails.has(email.toLowerCase())) return;
+    const user = emailToUser[email.toLowerCase()];
+    const name = user ? user.name : email.split('@')[0].replace(/\./g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    existing.push({ name, email, department: user?.dept || '' });
+    added++;
+  });
+  setManagers(existing);
+  renderManagerList();
+  updateManagerFilter();
+  updateCCFilters();
+  renderPhoneUsers();
+  renderCCAgents();
+  showToast(`Imported ${added} manager${added !== 1 ? 's' : ''} from Zoom`);
+}
+
+// ── CC Settings: Departments ──
+function renderCCDeptList() {
+  const depts = getCCDepts();
+  const list = document.getElementById('cc-dept-list');
+  if (depts.length === 0) {
+    list.innerHTML = '<div class="empty-state" style="padding:20px"><p>No CC departments added yet.</p></div>';
+    return;
+  }
+  list.innerHTML = depts.map((d, i) => `
+    <div class="manager-row">
+      <div style="width:28px;height:28px;background:var(--accent-teal-light);color:var(--accent-teal);border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0">${d[0]}</div>
+      <div class="manager-name">${d}</div>
+      <button class="btn-remove" onclick="removeCCDept(${i})">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addCCDept() {
+  const name = document.getElementById('new-cc-dept').value.trim();
+  if (!name) { showToast('Department name is required'); return; }
+  const depts = getCCDepts();
+  if (depts.some(d => d.toLowerCase() === name.toLowerCase())) { showToast('Department already exists'); return; }
+  depts.push(name);
+  setCCDepts(depts);
+  document.getElementById('new-cc-dept').value = '';
+  renderCCDeptList();
+  updateCCFilters();
+  renderCCAgents();
+  showToast('Department added');
+}
+
+function removeCCDept(index) {
+  const depts = getCCDepts();
+  const removed = depts.splice(index, 1)[0];
+  setCCDepts(depts);
+  // Clean up CC assignments referencing this dept
+  const s = loadState();
+  if (s.ccAssignments) {
+    Object.keys(s.ccAssignments).forEach(agent => {
+      if (s.ccAssignments[agent].dept === removed) s.ccAssignments[agent].dept = '';
+    });
+    saveState(s);
+  }
+  renderCCDeptList();
+  updateCCFilters();
+  renderCCAgents();
+  showToast('Department removed');
+}
+
+// ── CC Settings: Managers ──
+function updateCCFilters() {
+  const depts = getCCDepts();
+  const mgrs = getManagers();
+
+  const deptFilter = document.getElementById('cc-dept-filter');
+  const currentDept = deptFilter.value;
+  deptFilter.innerHTML = '<option value="">All Departments</option>';
+  depts.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; deptFilter.appendChild(o); });
+  deptFilter.value = currentDept;
+
+  const mgrFilter = document.getElementById('cc-mgr-filter');
+  const currentMgr = mgrFilter.value;
+  mgrFilter.innerHTML = '<option value="">All Managers</option><option value="__none__">Unassigned</option>';
+  mgrs.forEach(m => { const o = document.createElement('option'); o.value = m.name; o.textContent = m.name; mgrFilter.appendChild(o); });
+  mgrFilter.value = currentMgr;
+}
+
+// ── Init ──
+renderDashboard();
+populateFilters();
+renderPhoneUsers();
+renderManagerList();
+renderCCAgents();
+renderCCAdmins();
+renderCCQueues();
+renderCCDeptList();
+updateCCFilters();
+</script>
+</body>
+</html>
