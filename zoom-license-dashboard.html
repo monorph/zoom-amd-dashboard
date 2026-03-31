@@ -824,7 +824,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      Data as of March 27, 2026<br>
+      Data as of March 31, 2026<br>
       Powered by Zoom Phone API
     </div>
   </aside>
@@ -858,8 +858,8 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
           </div>
           <div class="kpi-label">Phone Licenses</div>
-          <div class="kpi-value">76 <span style="font-size:16px;font-weight:400;color:var(--text-muted)">/ 82</span></div>
-          <div class="kpi-sub">6 available licenses</div>
+          <div class="kpi-value">77 <span style="font-size:16px;font-weight:400;color:var(--text-muted)">/ 82</span></div>
+          <div class="kpi-sub">5 available licenses</div>
         </div>
         <div class="kpi-card amber animate-in delay-3">
           <div class="kpi-icon">
@@ -1276,33 +1276,38 @@ const ccAdmins = [
 
 // ── Number Allocation ──
 const numberAllocation = {
-  users: 27, commonArea: 49, autoReceptionist: 35,
-  callQueue: 2, emergencyPool: 7, unassigned: 177
+  users: 28, commonArea: 49, autoReceptionist: 35,
+  callQueue: 2, emergencyPool: 7, unassigned: 176
 };
 
-// ── Usage Data (last 30 days, from Zoom APIs) ──
+// ── Usage Data (March 2026, from Zoom APIs) ──
 const phoneUsage = [
-  { name:"Freddy Clavijo", calls:553, inbound:120, outbound:433, totalMinutes:1380 },
-  { name:"Doris Carrillos", calls:376, inbound:150, outbound:226, totalMinutes:201 },
-  { name:"Gisself Diaz", calls:369, inbound:71, outbound:298, totalMinutes:1232 },
-  { name:"Wolfang Lagos", calls:201, inbound:52, outbound:149, totalMinutes:460 },
-  { name:"Ned James", calls:200, inbound:59, outbound:141, totalMinutes:272 },
-  { name:"Miranda Ortiz", calls:192, inbound:192, outbound:0, totalMinutes:17 },
-  { name:"Niquea Eason", calls:179, inbound:178, outbound:1, totalMinutes:190 },
-  { name:"Estephani Sanchez", calls:175, inbound:167, outbound:8, totalMinutes:470 },
-  { name:"Carissa Vega", calls:163, inbound:162, outbound:1, totalMinutes:134 },
-  { name:"Bryan Aparicio", calls:149, inbound:140, outbound:9, totalMinutes:407 },
-  { name:"Venessa Henry", calls:77, inbound:44, outbound:33, totalMinutes:302 },
-  { name:"Katherine Coyne", calls:40, inbound:31, outbound:9, totalMinutes:307 },
-  { name:"Nathali Fierro", calls:13, inbound:12, outbound:1, totalMinutes:59 },
+  { name:"Milemnia Rodriguez", calls:1000, inbound:1, outbound:999, totalMinutes:512 },
+  { name:"Freddy Clavijo", calls:581, inbound:128, outbound:453, totalMinutes:1420 },
+  { name:"Doris Carrillos", calls:522, inbound:168, outbound:354, totalMinutes:453 },
+  { name:"Bryan Aparicio", calls:485, inbound:236, outbound:249, totalMinutes:1150 },
+  { name:"Estephani Sanchez", calls:475, inbound:242, outbound:233, totalMinutes:1174 },
+  { name:"Gisself Diaz", calls:406, inbound:78, outbound:328, totalMinutes:1349 },
+  { name:"Carissa Vega", calls:341, inbound:170, outbound:171, totalMinutes:570 },
+  { name:"Wolfang Lagos", calls:218, inbound:60, outbound:158, totalMinutes:479 },
+  { name:"Niquea Eason", calls:217, inbound:186, outbound:31, totalMinutes:357 },
+  { name:"Ned James", calls:214, inbound:63, outbound:151, totalMinutes:317 },
+  { name:"Miranda Ortiz", calls:206, inbound:203, outbound:3, totalMinutes:82 },
+  { name:"Dominic Baguio", calls:169, inbound:0, outbound:169, totalMinutes:405 },
+  { name:"Denise Capalar", calls:133, inbound:0, outbound:133, totalMinutes:573 },
+  { name:"Katherine Coyne", calls:107, inbound:32, outbound:75, totalMinutes:573 },
+  { name:"Venessa Henry", calls:79, inbound:46, outbound:33, totalMinutes:276 },
+  { name:"Jude Duron", calls:70, inbound:13, outbound:57, totalMinutes:104 },
+  { name:"Nathali Fierro", calls:28, inbound:12, outbound:16, totalMinutes:190 },
+  { name:"Cybil Quijote", calls:27, inbound:0, outbound:27, totalMinutes:101 },
+  { name:"Michell Llovet", calls:26, inbound:0, outbound:26, totalMinutes:166 },
+  { name:"Chastity Leak", calls:21, inbound:4, outbound:17, totalMinutes:143 },
+  { name:"Krystelle Dioneza", calls:21, inbound:0, outbound:21, totalMinutes:38 },
+  { name:"Carlos Molina", calls:15, inbound:8, outbound:7, totalMinutes:11 },
+  { name:"Esther Ramdin", calls:15, inbound:8, outbound:7, totalMinutes:63 },
   { name:"Spencer Hastings", calls:13, inbound:13, outbound:0, totalMinutes:0 },
-  { name:"Jude Duron", calls:11, inbound:11, outbound:0, totalMinutes:0 },
-  { name:"Carlos Molina", calls:11, inbound:6, outbound:5, totalMinutes:3 },
-  { name:"Sharee Bedassee", calls:8, inbound:7, outbound:1, totalMinutes:0 },
-  { name:"Chastity Leak", calls:7, inbound:4, outbound:3, totalMinutes:5 },
+  { name:"Sharee Bedassee", calls:11, inbound:10, outbound:1, totalMinutes:3 },
   { name:"Saul Soto", calls:6, inbound:4, outbound:2, totalMinutes:6 },
-  { name:"Esther Ramdin", calls:5, inbound:5, outbound:0, totalMinutes:14 },
-  { name:"Milemnia Rodriguez", calls:1, inbound:1, outbound:0, totalMinutes:1 },
   { name:"Rhayner Hidalgo", calls:1, inbound:1, outbound:0, totalMinutes:0 }
 ];
 
