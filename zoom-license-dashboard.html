@@ -157,6 +157,33 @@
     line-height: 1.6;
   }
 
+  .admin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-muted);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .admin-btn:hover { background: var(--accent-teal-dim); color: var(--accent-teal); border-color: var(--accent-teal); }
+  .admin-btn.active { background: var(--accent-teal-dim); color: var(--accent-teal); border-color: var(--accent-teal); }
+  .admin-btn svg { width: 14px; height: 14px; }
+  .admin-only { display: none; }
+  body.is-admin .admin-only { display: revert; }
+  body:not(.is-admin) select.manager-select { pointer-events: none; opacity: 0.6; }
+  body:not(.is-admin) .btn-remove { display: none; }
+  body:not(.is-admin) .settings-admin-gate { display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  body.is-admin .settings-admin-gate { display: none; }
+
   /* ── Main Content ── */
   .main {
     flex: 1;
@@ -826,6 +853,14 @@
     <div class="sidebar-footer">
       Data as of March 31, 2026<br>
       Powered by Zoom Phone API
+      <button id="admin-login-btn" class="admin-btn" onclick="adminLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Admin Login
+      </button>
+      <button id="admin-logout-btn" class="admin-btn active" onclick="adminLogout()" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout Admin
+      </button>
     </div>
   </aside>
 
@@ -1127,54 +1162,64 @@
         </div>
       </div>
 
-      <div class="settings-section">
-        <h3>Departments</h3>
-        <p>Departments are shared across Zoom Phone and Contact Center. They appear in dropdown filters and assignment columns on both pages.</p>
-
-        <div class="manager-list" id="cc-dept-list"></div>
-
-        <div class="add-manager-form" style="grid-template-columns:1fr auto">
-          <div class="form-group">
-            <label>Department Name</label>
-            <input type="text" class="form-input" id="new-cc-dept" placeholder="e.g., Billing, Referrals, Call Center">
-          </div>
-          <button class="btn-primary" onclick="addCCDept()" style="align-self:end">Add Department</button>
+      <div class="settings-admin-gate">
+        <div class="empty-state" style="padding:40px;text-align:center">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:12px"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <h3 style="margin-bottom:6px;color:var(--text-primary)">Admin Access Required</h3>
+          <p style="color:var(--text-secondary);font-size:14px">Click <strong>Admin Login</strong> in the sidebar to manage departments, managers, and assignments.</p>
         </div>
       </div>
 
-      <div class="settings-section">
-        <h3>Manager Directory</h3>
-        <p>Managers are shared across Zoom Phone and Contact Center. They appear in the manager assignment dropdowns on both pages.</p>
+      <div class="admin-only">
+        <div class="settings-section">
+          <h3>Departments</h3>
+          <p>Departments are shared across Zoom Phone and Contact Center. They appear in dropdown filters and assignment columns on both pages.</p>
 
-        <div class="manager-list" id="manager-list"></div>
+          <div class="manager-list" id="cc-dept-list"></div>
 
-        <div class="add-manager-form">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" class="form-input" id="new-mgr-name" placeholder="e.g., Sergio Garcia">
+          <div class="add-manager-form" style="grid-template-columns:1fr auto">
+            <div class="form-group">
+              <label>Department Name</label>
+              <input type="text" class="form-input" id="new-cc-dept" placeholder="e.g., Billing, Referrals, Call Center">
+            </div>
+            <button class="btn-primary" onclick="addCCDept()" style="align-self:end">Add Department</button>
           </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-input" id="new-mgr-email" placeholder="e.g., sergio@associatesmd.com">
-          </div>
-          <div class="form-group">
-            <label>Department</label>
-            <input type="text" class="form-input" id="new-mgr-dept" placeholder="e.g., Operations">
-          </div>
-          <button class="btn-primary" onclick="addManager()" style="align-self:end">Add Manager</button>
         </div>
-      </div>
 
-      <div class="settings-section">
-        <h3>Quick Import</h3>
-        <p>Auto-detect managers from Zoom Phone user profiles and add them to the directory.</p>
-        <button class="btn-secondary" onclick="importManagersFromZoom()">Import from Zoom Data</button>
-      </div>
+        <div class="settings-section">
+          <h3>Manager Directory</h3>
+          <p>Managers are shared across Zoom Phone and Contact Center. They appear in the manager assignment dropdowns on both pages.</p>
 
-      <div class="settings-section">
-        <h3>Export / Backup</h3>
-        <p>Download your dashboard settings, manager list, and assignments as JSON.</p>
-        <button class="btn-secondary" onclick="exportSettings()">Export Settings</button>
+          <div class="manager-list" id="manager-list"></div>
+
+          <div class="add-manager-form">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" class="form-input" id="new-mgr-name" placeholder="e.g., Sergio Garcia">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-input" id="new-mgr-email" placeholder="e.g., sergio@associatesmd.com">
+            </div>
+            <div class="form-group">
+              <label>Department</label>
+              <input type="text" class="form-input" id="new-mgr-dept" placeholder="e.g., Operations">
+            </div>
+            <button class="btn-primary" onclick="addManager()" style="align-self:end">Add Manager</button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3>Quick Import</h3>
+          <p>Auto-detect managers from Zoom Phone user profiles and add them to the directory.</p>
+          <button class="btn-secondary" onclick="importManagersFromZoom()">Import from Zoom Data</button>
+        </div>
+
+        <div class="settings-section">
+          <h3>Export / Backup</h3>
+          <p>Download your dashboard settings, manager list, and assignments as JSON.</p>
+          <button class="btn-secondary" onclick="exportSettings()">Export Settings</button>
+        </div>
       </div>
     </div>
 
@@ -1347,17 +1392,81 @@ const ccUsage = [
 const siteDistribution = {};
 phoneUsers.forEach(u => { siteDistribution[u.site] = (siteDistribution[u.site] || 0) + 1; });
 
+// ── Hardcoded Defaults (survive localStorage clearing) ──
+const DEFAULT_DEPTS = ["Call Center","Prescriptions","Medical Records","Prior-Authorization","Billing","Referrals","Recapture/Confirmation","AMD-VIP"];
+const DEFAULT_MANAGERS = [
+  { name:"Carlos Molina", email:"carlos@associatesmd.com", department:"IT" },
+  { name:"Niquea Eason", email:"niquea.eason@associatesmd.com", department:"Patient Satisfaction" },
+  { name:"Kelly Rodriguez", email:"kelly@associatesmd.com", department:"Referrals" },
+  { name:"Patricia Menendez", email:"patricia.menendez@associatesmd.com", department:"Billing" }
+];
+
+// ── Admin Auth ──
+const ADMIN_HASH = '8a972c8e6ec3a24ed0347543890ebf2329d067be84bf6be93b0e45b0ec1a0ee7';
+let isAdmin = sessionStorage.getItem('zoom-dash-admin') === 'true';
+
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function adminLogin() {
+  const pw = prompt('Enter admin password:');
+  if (!pw) return;
+  const hash = await sha256(pw);
+  if (hash === ADMIN_HASH) {
+    isAdmin = true;
+    sessionStorage.setItem('zoom-dash-admin', 'true');
+    document.body.classList.add('is-admin');
+    document.getElementById('admin-login-btn').style.display = 'none';
+    document.getElementById('admin-logout-btn').style.display = '';
+    refreshAll();
+    showToast('Admin mode enabled');
+  } else {
+    showToast('Incorrect password');
+  }
+}
+
+function adminLogout() {
+  isAdmin = false;
+  sessionStorage.removeItem('zoom-dash-admin');
+  document.body.classList.remove('is-admin');
+  document.getElementById('admin-login-btn').style.display = '';
+  document.getElementById('admin-logout-btn').style.display = 'none';
+  refreshAll();
+  showToast('Admin mode disabled');
+}
+
+function refreshAll() {
+  renderPhoneUsers();
+  renderCCAgents();
+  renderManagerList();
+  renderCCDeptList();
+  updateManagerFilter();
+  updateCCFilters();
+}
+
 // ── State ──
 const STORAGE_KEY = 'zoom-dashboard';
 function loadState() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
 function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-function getManagers() { return loadState().managers || []; }
+
+function initDefaults() {
+  const s = loadState();
+  let changed = false;
+  if (!s.managers || s.managers.length === 0) { s.managers = DEFAULT_MANAGERS.map(m => ({...m})); changed = true; }
+  if (!s.ccDepts || s.ccDepts.length === 0) { s.ccDepts = [...DEFAULT_DEPTS]; changed = true; }
+  if (changed) saveState(s);
+}
+initDefaults();
+
+function getManagers() { return loadState().managers || DEFAULT_MANAGERS.map(m => ({...m})); }
 function setManagers(list) { const s = loadState(); s.managers = list; saveState(s); }
 function getUserAssignments() { return loadState().assignments || {}; }
 function setUserAssignment(email, managerName) { const s = loadState(); if (!s.assignments) s.assignments = {}; s.assignments[email] = managerName; saveState(s); }
 
 // CC state helpers
-function getCCDepts() { return loadState().ccDepts || []; }
+function getCCDepts() { return loadState().ccDepts || [...DEFAULT_DEPTS]; }
 function setCCDepts(list) { const s = loadState(); s.ccDepts = list; saveState(s); }
 
 function getCCAssignments() { return loadState().ccAssignments || {}; }
@@ -1911,6 +2020,11 @@ function updateCCFilters() {
 }
 
 // ── Init ──
+if (isAdmin) {
+  document.body.classList.add('is-admin');
+  document.getElementById('admin-login-btn').style.display = 'none';
+  document.getElementById('admin-logout-btn').style.display = '';
+}
 renderDashboard();
 populateFilters();
 renderPhoneUsers();
