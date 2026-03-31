@@ -992,7 +992,6 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Export Excel
           </button>
-          <button class="btn-primary" onclick="saveAllManagers()">Save All Assignments</button>
         </div>
       </div>
 
@@ -1102,9 +1101,6 @@
               <tbody id="cc-agents-tbody"></tbody>
             </table>
           </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:12px">
-          <button class="btn-primary" onclick="saveCCAssignments()">Save All Assignments</button>
         </div>
       </div>
 
@@ -1857,7 +1853,6 @@ function onCCAssignChange(sel) {
   showToast(field === 'dept' ? 'Department updated' : 'Manager updated');
 }
 
-function saveCCAssignments() { showToast('All CC assignments saved'); }
 
 function filterCCAgents() {
   const search = document.getElementById('cc-agent-search').value.toLowerCase();
@@ -1967,8 +1962,6 @@ function exportCCExcel() {
   ccAdmins.forEach(a => { rows.push([a.name, 'Admin', 0, a.note, '', '']); });
   exportXLSX(headers, rows, 'zoom_cc_agents_' + new Date().toISOString().slice(0,10) + '.xlsx');
 }
-
-function saveAllManagers() { showToast('All assignments saved'); }
 
 function exportSettings() {
   const state = loadState();
