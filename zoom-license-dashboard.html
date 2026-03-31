@@ -798,6 +798,12 @@
   .table-wrap { max-height: 640px; overflow-y: auto; }
   .bulk-actions { display: flex; gap: 10px; align-items: center; }
 
+  th.sortable { cursor: pointer; user-select: none; }
+  th.sortable:hover { color: var(--accent-teal); }
+  th.sortable::after { content: ''; margin-left: 4px; }
+  th.sortable.asc::after { content: ' ▲'; font-size: 10px; }
+  th.sortable.desc::after { content: ' ▼'; font-size: 10px; }
+
   /* ── Scrollbar ── */
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -979,12 +985,12 @@
       <div class="page-header">
         <div>
           <h2>Zoom Phone Users</h2>
-          <p>28 active licenses with manager assignments</p>
+          <p id="phone-users-subtitle">28 active licenses with department &amp; manager assignments</p>
         </div>
         <div class="bulk-actions">
-          <button class="btn-secondary" onclick="exportCSV()">
+          <button class="btn-secondary" onclick="exportPhoneExcel()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export CSV
+            Export Excel
           </button>
           <button class="btn-primary" onclick="saveAllManagers()">Save All Assignments</button>
         </div>
@@ -1007,12 +1013,12 @@
           <table class="data-table">
             <thead>
               <tr>
-                <th>User</th>
+                <th class="sortable" data-sort="name" onclick="sortPhoneUsers('name')">User</th>
                 <th>Extension</th>
-                <th>Department</th>
                 <th>Site</th>
                 <th>Status</th>
-                <th>Manager</th>
+                <th class="sortable" data-sort="dept" onclick="sortPhoneUsers('dept')">Department</th>
+                <th class="sortable" data-sort="manager" onclick="sortPhoneUsers('manager')">Manager</th>
               </tr>
             </thead>
             <tbody id="phone-users-tbody"></tbody>
@@ -1029,9 +1035,9 @@
           <p>32 CC licenses — 29 agents + 3 admin-only</p>
         </div>
         <div class="bulk-actions">
-          <button class="btn-secondary" onclick="exportCCCSV()">
+          <button class="btn-secondary" onclick="exportCCExcel()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export CSV
+            Export Excel
           </button>
         </div>
       </div>
@@ -1086,11 +1092,11 @@
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Agent</th>
-                  <th>Department</th>
-                  <th>Manager</th>
+                  <th class="sortable" data-sort="name" onclick="sortCCAgents('name')">Agent</th>
                   <th>Queues</th>
                   <th>Queue Details</th>
+                  <th class="sortable" data-sort="dept" onclick="sortCCAgents('dept')">Department</th>
+                  <th class="sortable" data-sort="manager" onclick="sortCCAgents('manager')">Manager</th>
                 </tr>
               </thead>
               <tbody id="cc-agents-tbody"></tbody>
@@ -1466,9 +1472,45 @@ function initDefaults() {
   let changed = false;
   if (!s.managers || s.managers.length === 0) { s.managers = DEFAULT_MANAGERS.map(m => ({...m})); changed = true; }
   if (!s.ccDepts || s.ccDepts.length === 0) { s.ccDepts = [...DEFAULT_DEPTS]; changed = true; }
+  // Auto-populate departments from Zoom Phone user data
+  const zoomDepts = [...new Set(phoneUsers.map(u => u.dept).filter(d => d && d !== 'N/A'))];
+  const existingDepts = new Set((s.ccDepts || DEFAULT_DEPTS).map(d => d.toLowerCase()));
+  let deptsChanged = false;
+  for (const d of zoomDepts) {
+    if (!existingDepts.has(d.toLowerCase())) {
+      s.ccDepts = s.ccDepts || [...DEFAULT_DEPTS];
+      s.ccDepts.push(d);
+      deptsChanged = true;
+    }
+  }
+  if (deptsChanged) changed = true;
   if (changed) saveState(s);
 }
 initDefaults();
+
+// ── Sort State ──
+let phoneSortKey = '', phoneSortDir = 'asc';
+let ccSortKey = '', ccSortDir = 'asc';
+
+function sortPhoneUsers(key) {
+  if (phoneSortKey === key) { phoneSortDir = phoneSortDir === 'asc' ? 'desc' : 'asc'; }
+  else { phoneSortKey = key; phoneSortDir = 'asc'; }
+  document.querySelectorAll('#page-phone-users th.sortable').forEach(th => {
+    th.classList.remove('asc','desc');
+    if (th.dataset.sort === key) th.classList.add(phoneSortDir);
+  });
+  filterUsers();
+}
+
+function sortCCAgents(key) {
+  if (ccSortKey === key) { ccSortDir = ccSortDir === 'asc' ? 'desc' : 'asc'; }
+  else { ccSortKey = key; ccSortDir = 'asc'; }
+  document.querySelectorAll('#cc-tab-agents th.sortable').forEach(th => {
+    th.classList.remove('asc','desc');
+    if (th.dataset.sort === key) th.classList.add(ccSortDir);
+  });
+  filterCCAgents();
+}
 
 function getManagers() { return loadState().managers || DEFAULT_MANAGERS.map(m => ({...m})); }
 function setManagers(list) { const s = loadState(); s.managers = list; saveState(s); }
@@ -1601,16 +1643,33 @@ function getInitials(name) {
 }
 
 function renderPhoneUsers(filtered) {
-  const users = filtered || phoneUsers;
+  const users = (filtered || phoneUsers).slice();
   const assignments = getUserAssignments();
   const managers = getManagers();
+  const depts = getCCDepts();
   const tbody = document.getElementById('phone-users-tbody');
+
+  // Apply sorting
+  if (phoneSortKey) {
+    users.sort((a, b) => {
+      let va, vb;
+      if (phoneSortKey === 'name') { va = a.name; vb = b.name; }
+      else if (phoneSortKey === 'dept') { va = assignments[a.email+'__dept'] || a.dept; vb = assignments[b.email+'__dept'] || b.dept; }
+      else if (phoneSortKey === 'manager') { va = assignments[a.email] || ''; vb = assignments[b.email] || ''; }
+      return phoneSortDir === 'asc' ? (va||'').localeCompare(vb||'') : (vb||'').localeCompare(va||'');
+    });
+  }
 
   tbody.innerHTML = users.map(u => {
     const assigned = assignments[u.email] || '';
     const hasValue = assigned ? 'has-value' : '';
     const managerOptions = managers.map(m =>
       `<option value="${m.name}" ${assigned === m.name ? 'selected' : ''}>${m.name}</option>`
+    ).join('');
+    const assignedDept = assignments[u.email+'__dept'] || u.dept;
+    const deptHasVal = assignments[u.email+'__dept'] ? 'has-value' : '';
+    const deptOptions = depts.map(d =>
+      `<option value="${d}" ${assignedDept === d ? 'selected' : ''}>${d}</option>`
     ).join('');
     return `
       <tr>
@@ -1624,9 +1683,14 @@ function renderPhoneUsers(filtered) {
           </div>
         </td>
         <td style="font-variant-numeric:tabular-nums;color:var(--text-secondary)">${u.ext}</td>
-        <td><span style="color:var(--text-secondary);font-size:12px">${u.dept}</span></td>
         <td><span class="badge badge-site">${u.site}</span></td>
         <td><span class="badge badge-active">Active</span></td>
+        <td>
+          <select class="manager-select ${deptHasVal}" data-user-email="${u.email}" data-field="dept" onchange="onDeptChange(this)">
+            <option value="">-- Dept --</option>
+            ${deptOptions}
+          </select>
+        </td>
         <td>
           <select class="manager-select ${hasValue}" data-user-email="${u.email}" onchange="onManagerChange(this)">
             <option value="">-- Assign --</option>
@@ -1642,6 +1706,12 @@ function onManagerChange(sel) {
   setUserAssignment(sel.dataset.userEmail, sel.value);
   sel.classList.toggle('has-value', !!sel.value);
   showToast('Manager updated');
+}
+
+function onDeptChange(sel) {
+  setUserAssignment(sel.dataset.userEmail + '__dept', sel.value);
+  sel.classList.toggle('has-value', !!sel.value);
+  showToast('Department updated');
 }
 
 function filterUsers() {
@@ -1712,11 +1782,25 @@ function renderCCAdmins() {
 }
 
 function renderCCAgents(filtered) {
-  const agents = filtered || ccAgents;
+  const agents = (filtered || ccAgents).slice();
   const ccAssigns = getCCAssignments();
   const depts = getCCDepts();
   const mgrs = getManagers();
   const tbody = document.getElementById('cc-agents-tbody');
+
+  // Apply sorting
+  if (ccSortKey) {
+    agents.sort((a, b) => {
+      let va, vb;
+      const aa = ccAssigns[a.name] || {};
+      const bb = ccAssigns[b.name] || {};
+      if (ccSortKey === 'name') { va = a.name; vb = b.name; }
+      else if (ccSortKey === 'dept') { va = aa.dept || ''; vb = bb.dept || ''; }
+      else if (ccSortKey === 'manager') { va = aa.manager || ''; vb = bb.manager || ''; }
+      return ccSortDir === 'asc' ? (va||'').localeCompare(vb||'') : (vb||'').localeCompare(va||'');
+    });
+  }
+
   tbody.innerHTML = agents.map(a => {
     const assign = ccAssigns[a.name] || {};
     const maxShow = 3;
@@ -1746,6 +1830,8 @@ function renderCCAgents(filtered) {
             </div>
           </div>
         </td>
+        <td style="font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent-teal)">${a.queues.length}</td>
+        <td><div class="queue-tags">${tags}${overflowTag}</div></td>
         <td>
           <select class="manager-select ${deptHasVal}" data-agent="${a.name}" data-field="dept" onchange="onCCAssignChange(this)">
             <option value="">-- Dept --</option>
@@ -1758,8 +1844,6 @@ function renderCCAgents(filtered) {
             ${mgrOptions}
           </select>
         </td>
-        <td style="font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent-teal)">${a.queues.length}</td>
-        <td><div class="queue-tags">${tags}${overflowTag}</div></td>
       </tr>
     `;
   }).join('');
@@ -1833,41 +1917,58 @@ function filterCCQueues() {
 }
 
 // ── Exports ──
-function exportCCCSV() {
-  const ccAssigns = getCCAssignments();
-  const rows = [['Name','Type','Department','Manager','Queues Count','Queue Names / Note']];
-  ccAgents.forEach(a => {
-    const assign = ccAssigns[a.name] || {};
-    rows.push([a.name, 'Agent', assign.dept || '', assign.manager || '', a.queues.length, a.queues.join('; ')]);
+function exportXLSX(headers, rows, filename) {
+  let xml = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>';
+  xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
+  xml += '<Styles><Style ss:ID="header"><Font ss:Bold="1" ss:Size="11"/><Interior ss:Color="#1B2A4A" ss:Pattern="Solid"/><Font ss:Color="#FFFFFF" ss:Bold="1"/></Style></Styles>';
+  xml += '<Worksheet ss:Name="Sheet1"><Table>';
+  xml += '<Row ss:StyleID="header">';
+  headers.forEach(h => { xml += '<Cell><Data ss:Type="String">' + h.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</Data></Cell>'; });
+  xml += '</Row>';
+  rows.forEach(row => {
+    xml += '<Row>';
+    row.forEach(cell => {
+      const val = String(cell == null ? '' : cell);
+      const type = !isNaN(cell) && cell !== '' ? 'Number' : 'String';
+      xml += '<Cell><Data ss:Type="' + type + '">' + val.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</Data></Cell>';
+    });
+    xml += '</Row>';
   });
-  ccAdmins.forEach(a => { rows.push([a.name, 'Admin', '', '', 0, a.note + ' — ' + a.email]); });
-  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
+  xml += '</Table></Worksheet></Workbook>';
+  const blob = new Blob([xml], { type: 'application/vnd.ms-excel' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'zoom_cc_agents_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
-  showToast('CC agents exported');
+  showToast('Excel exported');
+}
+
+function exportPhoneExcel() {
+  const assignments = getUserAssignments();
+  const headers = ['Name','Email','Extension','Site','Status','Department','Manager'];
+  const rows = phoneUsers.map(u => [
+    u.name, u.email, u.ext, u.site, 'Active',
+    assignments[u.email+'__dept'] || u.dept,
+    assignments[u.email] || 'Unassigned'
+  ]);
+  exportXLSX(headers, rows, 'zoom_phone_users_' + new Date().toISOString().slice(0,10) + '.xlsx');
+}
+
+function exportCCExcel() {
+  const ccAssigns = getCCAssignments();
+  const headers = ['Name','Type','Queues Count','Queue Names','Department','Manager'];
+  const rows = [];
+  ccAgents.forEach(a => {
+    const assign = ccAssigns[a.name] || {};
+    rows.push([a.name, 'Agent', a.queues.length, a.queues.join('; '), assign.dept || '', assign.manager || '']);
+  });
+  ccAdmins.forEach(a => { rows.push([a.name, 'Admin', 0, a.note, '', '']); });
+  exportXLSX(headers, rows, 'zoom_cc_agents_' + new Date().toISOString().slice(0,10) + '.xlsx');
 }
 
 function saveAllManagers() { showToast('All assignments saved'); }
-
-function exportCSV() {
-  const assignments = getUserAssignments();
-  const rows = [['Name','Email','Extension','Department','Site','Status','Manager']];
-  phoneUsers.forEach(u => { rows.push([u.name, u.email, u.ext, u.dept, u.site, 'Active', assignments[u.email] || 'Unassigned']); });
-  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'zoom_phone_users_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('CSV exported');
-}
 
 function exportSettings() {
   const state = loadState();
@@ -2076,6 +2177,7 @@ if (isAdmin) {
 renderDashboard();
 populateFilters();
 renderPhoneUsers();
+document.getElementById('phone-users-subtitle').textContent = phoneUsers.length + ' active licenses with department & manager assignments';
 renderManagerList();
 renderCCAgents();
 renderCCAdmins();
