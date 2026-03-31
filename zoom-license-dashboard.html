@@ -1952,31 +1952,17 @@ function filterCCQueues() {
 
 // ── Exports ──
 function exportXLSX(headers, rows, filename) {
-  let xml = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>';
-  xml += '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">';
-  xml += '<Styles><Style ss:ID="header"><Font ss:Bold="1" ss:Size="11"/><Interior ss:Color="#1B2A4A" ss:Pattern="Solid"/><Font ss:Color="#FFFFFF" ss:Bold="1"/></Style></Styles>';
-  xml += '<Worksheet ss:Name="Sheet1"><Table>';
-  xml += '<Row ss:StyleID="header">';
-  headers.forEach(h => { xml += '<Cell><Data ss:Type="String">' + h.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</Data></Cell>'; });
-  xml += '</Row>';
-  rows.forEach(row => {
-    xml += '<Row>';
-    row.forEach(cell => {
-      const val = String(cell == null ? '' : cell);
-      const type = !isNaN(cell) && cell !== '' ? 'Number' : 'String';
-      xml += '<Cell><Data ss:Type="' + type + '">' + val.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</Data></Cell>';
-    });
-    xml += '</Row>';
-  });
-  xml += '</Table></Worksheet></Workbook>';
-  const blob = new Blob([xml], { type: 'application/vnd.ms-excel' });
+  const escape = v => { const s = String(v == null ? '' : v); return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g,'""') + '"' : s; };
+  const csv = [headers.map(escape).join(',')].concat(rows.map(r => r.map(escape).join(','))).join('\r\n');
+  const BOM = '\uFEFF';
+  const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = filename;
+  a.download = filename.replace(/\.xlsx$/, '.csv');
   a.click();
   URL.revokeObjectURL(url);
-  showToast('Excel exported');
+  showToast('Exported');
 }
 
 function exportPhoneExcel() {
@@ -1987,7 +1973,7 @@ function exportPhoneExcel() {
     assignments[u.email+'__dept'] || u.dept,
     assignments[u.email] || 'Unassigned'
   ]);
-  exportXLSX(headers, rows, 'zoom_phone_users_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  exportXLSX(headers, rows, 'zoom_phone_users_' + new Date().toISOString().slice(0,10) + '.csv');
 }
 
 function exportCCExcel() {
@@ -1999,7 +1985,7 @@ function exportCCExcel() {
     rows.push([a.name, 'Agent', a.queues.length, a.queues.join('; '), assign.dept || '', assign.manager || '']);
   });
   ccAdmins.forEach(a => { rows.push([a.name, 'Admin', 0, a.note, '', '']); });
-  exportXLSX(headers, rows, 'zoom_cc_agents_' + new Date().toISOString().slice(0,10) + '.xlsx');
+  exportXLSX(headers, rows, 'zoom_cc_agents_' + new Date().toISOString().slice(0,10) + '.csv');
 }
 
 function exportSettings() {
