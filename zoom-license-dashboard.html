@@ -862,7 +862,7 @@
     <div class="sidebar-footer">
       <span id="data-date">Data as of March 31, 2026</span><br>
       Powered by Zoom Phone API
-      <button id="admin-login-btn" class="admin-btn" onclick="adminLogin()">
+      <button id="admin-login-btn" class="admin-btn" onclick="navigateTo('admin-login')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
         Admin Login
       </button>
@@ -1232,6 +1232,30 @@
       </div>
     </div>
 
+    <!-- ════════════ ADMIN LOGIN PAGE ════════════ -->
+    <div class="page" id="page-admin-login">
+      <div style="display:flex;align-items:center;justify-content:center;min-height:60vh">
+        <div class="section-card" style="max-width:380px;width:100%;padding:40px">
+          <div style="text-align:center;margin-bottom:28px">
+            <div style="width:52px;height:52px;background:var(--accent-teal-dim);border-radius:14px;display:grid;place-items:center;margin:0 auto 16px">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <h2 style="font-family:'Fraunces',serif;font-size:24px;font-weight:600;letter-spacing:-0.03em">Admin Login</h2>
+            <p style="color:var(--text-secondary);font-size:13px;margin-top:4px">Sign in to manage assignments and settings</p>
+          </div>
+          <form id="admin-login-form" onsubmit="return handleAdminLogin(event)" autocomplete="on">
+            <input type="hidden" name="username" value="admin" autocomplete="username">
+            <div class="form-group" style="margin-bottom:16px">
+              <label style="font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px;display:block">Password</label>
+              <input type="password" id="admin-pw" name="password" class="form-input" placeholder="Enter admin password" autocomplete="current-password" required style="width:100%;padding:10px 14px;font-size:14px">
+            </div>
+            <div id="login-error" style="color:var(--accent-rose);font-size:12px;margin-bottom:12px;display:none">Incorrect password. Please try again.</div>
+            <button type="submit" class="btn-primary" style="width:100%;padding:10px;font-size:14px">Sign In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /main -->
 </div><!-- /shell -->
 
@@ -1422,9 +1446,17 @@ async function sha256(msg) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
-async function adminLogin() {
-  const pw = prompt('Enter admin password:');
-  if (!pw) return;
+function navigateTo(page) {
+  document.querySelectorAll('.sidebar-nav a').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const navLink = document.querySelector('.sidebar-nav a[data-page="' + page + '"]');
+  if (navLink) navLink.classList.add('active');
+}
+
+async function handleAdminLogin(e) {
+  e.preventDefault();
+  const pw = document.getElementById('admin-pw').value;
   const hash = await sha256(pw);
   if (hash === ADMIN_HASH) {
     isAdmin = true;
@@ -1432,11 +1464,17 @@ async function adminLogin() {
     document.body.classList.add('is-admin');
     document.getElementById('admin-login-btn').style.display = 'none';
     document.getElementById('admin-logout-btn').style.display = '';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('login-error').style.display = 'none';
     refreshAll();
+    navigateTo('dashboard');
     showToast('Admin mode enabled');
   } else {
-    showToast('Incorrect password');
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
   }
+  return false;
 }
 
 function adminLogout() {
@@ -1446,6 +1484,7 @@ function adminLogout() {
   document.getElementById('admin-login-btn').style.display = '';
   document.getElementById('admin-logout-btn').style.display = 'none';
   refreshAll();
+  navigateTo('dashboard');
   showToast('Admin mode disabled');
 }
 
