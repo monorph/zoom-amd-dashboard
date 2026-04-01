@@ -861,7 +861,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      <span id="data-date">Data as of March 31, 2026</span><br>
+      <span id="data-date">Data as of April 1, 2026</span><br>
       Powered by Zoom Phone API
       <button id="admin-login-btn" class="admin-btn" onclick="navigateTo('admin-login')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
@@ -1265,54 +1265,54 @@
 <script>
 // ── DATA:PHONE_USERS:START ──
 const phoneUsers = [
-  { name:"Ned James", email:"ned.james@associatesmd.com", ext:3553, phone:"+19546150918", status:"active", dept:"Office Manager", title:"Davie Office Manager", manager:"sergio@associatesmd.com", site:"Davie Clinic" },
-  { name:"Milemnia Rodriguez", email:"milemnia.rodriguez@associatesmd.com", ext:2212, phone:"+19547155856", status:"active", dept:"Call Center", title:"Call Center Agent", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
-  { name:"Katherine Coyne", email:"kcoyne@associatesmd.com", ext:2211, phone:"+19547516051", status:"active", dept:"Billing", title:"Patient Collector", manager:"lucas@associatesmd.com", site:"Remote Workers" },
-  { name:"Miranda Ortiz", email:"miranda.ortiz@associatesmd.com", ext:2210, phone:"+19543384190", status:"active", dept:"Billing", title:"Medical Records Clerk - Revenue Cycle", manager:"lucas@associatesmd.com", site:"Remote Workers" },
-  { name:"Krystelle Dioneza", email:"krystelle.dioneza@associatesmd.com", ext:2209, phone:"+19543535234", status:"active", dept:"Prescriptions", title:"Prescription Refill Agent", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
-  { name:"Dominic Baguio", email:"dominic.baguio@associatesmd.com", ext:2208, phone:"+19546394601", status:"active", dept:"Prescriptions Lead", title:"Medication Management Supervisor", manager:"", site:"Remote Workers" },
-  { name:"Freddy Clavijo", email:"freddy.clavijo@associatesmd.com", ext:2207, phone:"+19542567135", status:"active", dept:"Remote Workers", title:"Remote Medical Assistant", manager:"gisself.diaz@associatesmd.com", site:"Remote Workers" },
-  { name:"Gisself Diaz", email:"gisself.diaz@associatesmd.com", ext:2205, phone:"+19545147817", status:"active", dept:"Remote Clinical", title:"Remote Clinical Supervisor", manager:"felix@associatesmd.com", site:"Remote Workers" },
-  { name:"Rhayner Hidalgo", email:"rhayner.hidalgo@associatesmd.com", ext:2204, phone:"+19548873453", status:"active", dept:"Remote Workers", title:"Virtual Medical Assistant", manager:"felix@associatesmd.com", site:"Remote Workers" },
-  { name:"Wolfang Lagos", email:"wolfang.lagos@associatesmd.com", ext:2203, phone:"+19542792572", status:"active", dept:"Remote Workers", title:"Remote Medical Assistant", manager:"felix@associatesmd.com", site:"Remote Workers" },
-  { name:"Cybil Quijote", email:"cybil.quijote@associatesmd.com", ext:2202, phone:"+19546175012", status:"active", dept:"Refill Department", title:"Medication Management Coordinator", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
-  { name:"Maciel Lantigua", email:"maciel.lantigua@associatesmd.com", ext:1671, phone:"", status:"active", dept:"Billing/ Revenue Cycle", title:"Patient Collections Agent", manager:"lucas@associatesmd.com", site:"Corporate" },
-  { name:"Denise Capalar", email:"denise.capalar@associatesmd.com", ext:1666, phone:"+19546668422", status:"active", dept:"Refill Department", title:"Medication Management Coordinator", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
-  { name:"Jude Duron", email:"jude.duron@associatesmd.com", ext:1665, phone:"+19543385526", status:"active", dept:"HR", title:"Staff Recruiter", manager:"venessa@associatesmd.com", site:"Corporate" },
-  { name:"Bryan Aparicio", email:"bryan.aparicio@associatesmd.com", ext:1664, phone:"+19546150835", status:"active", dept:"VIP Concierge", title:"Concierge Health Assistant", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
-  { name:"Estephani Sanchez", email:"estephani.sanchez@associatesmd.com", ext:1663, phone:"+19544081492", status:"active", dept:"VIP Concierge", title:"Concierge Health Assistant", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
-  { name:"Carlos Molina", email:"Carlos@AssociatesMD.com", ext:1620, phone:"+19546150828", status:"active", dept:"Corporate", title:"Chief Technology Officer", manager:"", site:"Corporate" },
-  { name:"Esther Ramdin", email:"esther.ramdin@associatesmd.com", ext:1616, phone:"+19542848016", status:"active", dept:"Corporate", title:"Businesss Office Manager", manager:"sergio@associatesmd.com", site:"Corporate" },
-  { name:"Sharee Bedassee", email:"sharee.bedassee@associatesmd.com", ext:1572, phone:"+19543766741", status:"active", dept:"Operations", title:"Operations Manager", manager:"sergio@associatesmd.com", site:"Corporate" },
-  { name:"Saul Soto", email:"saul.soto@associatesmd.com", ext:1530, phone:"+19546408936", status:"active", dept:"IT", title:"Systems Administrator", manager:"Carlos@AssociatesMD.com", site:"Corporate" },
-  { name:"Michell Llovet", email:"mllovet@associatesmd.com", ext:1522, phone:"+19544295574", status:"active", dept:"Diet", title:"Nutrition Coach", manager:"Carissa@associatesmd.com", site:"Corporate" },
-  { name:"Nathali Fierro", email:"nathali.fierro@associatesmd.com", ext:1521, phone:"+19546150494", status:"active", dept:"Corporate", title:"Credentialing Specialist", manager:"chloe@associatesmd.com", site:"Corporate" },
-  { name:"Spencer Hastings", email:"spencer@associatesmd.com", ext:1504, phone:"+19543616806", status:"active", dept:"Corporate", title:"Chief Financial Officer", manager:"", site:"Corporate" },
-  { name:"Niquea Eason", email:"niquea.eason@associatesmd.com", ext:1186, phone:"+19543384186", status:"active", dept:"Call Center", title:"Sr. Director Patient Experience", manager:"sergio@associatesmd.com", site:"Corporate" },
-  { name:"Venessa Henry", email:"venessa@associatesmd.com", ext:1158, phone:"+19546150833", status:"active", dept:"Corporate", title:"VP of Human Resources", manager:"spencer@associatesmd.com", site:"Corporate" },
-  { name:"Doris Carrillos", email:"doris@associatesmd.com", ext:1102, phone:"+19547155878", status:"active", dept:"Office Manager", title:"PI office manager", manager:"sergio@associatesmd.com", site:"Pine Island" },
-  { name:"Carissa Vega", email:"Carissa@associatesmd.com", ext:1060, phone:"+19545773249", status:"active", dept:"Diet", title:"Dietitian", manager:"sergio@associatesmd.com", site:"Corporate" }
+  { name:"undefined undefined", email:"ned.james@associatesmd.com", ext:3553, phone:"+19546150918", status:"active", dept:"Office Manager", title:"Davie Office Manager", manager:"sergio@associatesmd.com", site:"Davie Clinic" },
+  { name:"undefined undefined", email:"milemnia.rodriguez@associatesmd.com", ext:2212, phone:"+19547155856", status:"active", dept:"Call Center", title:"Call Center Agent", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"kcoyne@associatesmd.com", ext:2211, phone:"+19547516051", status:"active", dept:"Billing", title:"Patient Collector", manager:"lucas@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"miranda.ortiz@associatesmd.com", ext:2210, phone:"+19543384190", status:"active", dept:"Billing", title:"Medical Records Clerk - Revenue Cycle", manager:"lucas@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"krystelle.dioneza@associatesmd.com", ext:2209, phone:"+19543535234", status:"active", dept:"Prescriptions", title:"Prescription Refill Agent", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"dominic.baguio@associatesmd.com", ext:2208, phone:"+19546394601", status:"active", dept:"Prescriptions Lead", title:"Medication Management Supervisor", manager:"", site:"Remote Workers" },
+  { name:"undefined undefined", email:"freddy.clavijo@associatesmd.com", ext:2207, phone:"+19542567135", status:"active", dept:"Remote Workers", title:"Remote Medical Assistant", manager:"gisself.diaz@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"gisself.diaz@associatesmd.com", ext:2205, phone:"+19545147817", status:"active", dept:"Remote Clinical", title:"Remote Clinical Supervisor", manager:"felix@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"rhayner.hidalgo@associatesmd.com", ext:2204, phone:"+19548873453", status:"active", dept:"Remote Workers", title:"Virtual Medical Assistant", manager:"felix@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"wolfang.lagos@associatesmd.com", ext:2203, phone:"+19542792572", status:"active", dept:"Remote Workers", title:"Remote Medical Assistant", manager:"felix@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"cybil.quijote@associatesmd.com", ext:2202, phone:"+19546175012", status:"active", dept:"Refill Department", title:"Medication Management Coordinator", manager:"niquea.eason@associatesmd.com", site:"Remote Workers" },
+  { name:"undefined undefined", email:"maciel.lantigua@associatesmd.com", ext:1671, phone:"None", status:"active", dept:"Billing/ Revenue Cycle", title:"Patient Collections Agent", manager:"lucas@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"denise.capalar@associatesmd.com", ext:1666, phone:"+19546668422", status:"active", dept:"Refill Department", title:"Medication Management Coordinator", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"jude.duron@associatesmd.com", ext:1665, phone:"+19543385526", status:"active", dept:"HR", title:"Staff Recruiter", manager:"venessa@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"bryan.aparicio@associatesmd.com", ext:1664, phone:"+19546150835", status:"active", dept:"VIP Concierge", title:"Concierge Health Assistant", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"estephani.sanchez@associatesmd.com", ext:1663, phone:"+19544081492", status:"active", dept:"VIP Concierge", title:"Concierge Health Assistant", manager:"niquea.eason@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"Carlos@AssociatesMD.com", ext:1620, phone:"+19546150828", status:"active", dept:"Corporate", title:"Chief Technology Officer", manager:"", site:"Corporate" },
+  { name:"undefined undefined", email:"esther.ramdin@associatesmd.com", ext:1616, phone:"+19542848016", status:"active", dept:"Corporate", title:"Businesss Office Manager", manager:"sergio@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"sharee.bedassee@associatesmd.com", ext:1572, phone:"+19543766741, +19546150873", status:"active", dept:"Operations", title:"Operations Manager", manager:"sergio@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"saul.soto@associatesmd.com", ext:1530, phone:"+19546408936", status:"active", dept:"IT", title:"Systems Administrator", manager:"Carlos@AssociatesMD.com", site:"Corporate" },
+  { name:"undefined undefined", email:"mllovet@associatesmd.com", ext:1522, phone:"+19544295574", status:"active", dept:"Diet", title:"Nutrition Coach", manager:"Carissa@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"nathali.fierro@associatesmd.com", ext:1521, phone:"+19546150494", status:"active", dept:"Corporate", title:"Credentialing Specialist", manager:"chloe@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"spencer@associatesmd.com", ext:1504, phone:"+19543616806", status:"active", dept:"Corporate", title:"Chief Financial Officer", manager:"", site:"Corporate" },
+  { name:"undefined undefined", email:"niquea.eason@associatesmd.com", ext:1186, phone:"+19543384186", status:"active", dept:"Call Center", title:"Sr. Director Patient Experience", manager:"sergio@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"venessa@associatesmd.com", ext:1158, phone:"+19546150833", status:"active", dept:"Corporate", title:"VP of Human Resources", manager:"spencer@associatesmd.com", site:"Corporate" },
+  { name:"undefined undefined", email:"doris@associatesmd.com", ext:1102, phone:"+19547155878", status:"active", dept:"Office Manager", title:"PI office manager", manager:"sergio@associatesmd.com", site:"Pine Island" },
+  { name:"undefined undefined", email:"Carissa@associatesmd.com", ext:1060, phone:"+19545773249", status:"active", dept:"Diet", title:"Dietitian", manager:"sergio@associatesmd.com", site:"Corporate" }
 ];
 // ── DATA:PHONE_USERS:END ──
 
 // ── DATA:CC_QUEUES:START ──
 const ccQueues = [
-  { name:"Patient Feedback Fix", channel:"voice", agents:1, supervisors:0, status:"active", modified:"2026-03-17" },
-  { name:"Outreach Outbound (DO NOT USE)", channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"2025-10-07" },
-  { name:"Billing Spa", channel:"voice", agents:3, supervisors:1, status:"active", modified:"2026-01-09" },
-  { name:"Medical Records Spa", channel:"voice", agents:3, supervisors:1, status:"active", modified:"2025-07-10" },
-  { name:"Spanish General Inquiries", channel:"voice", agents:10, supervisors:4, status:"active", modified:"2025-10-31" },
-  { name:"Spanish Appointments", channel:"voice", agents:10, supervisors:4, status:"active", modified:"2025-07-10" },
-  { name:"Outreach (DO NOT USE)", channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"2025-10-07" },
-  { name:"Billing Eng", channel:"voice", agents:4, supervisors:1, status:"active", modified:"2026-01-09" },
-  { name:"Medical Records Eng", channel:"voice", agents:3, supervisors:1, status:"active", modified:"2025-07-10" },
-  { name:"English General Inquiries", channel:"voice", agents:16, supervisors:4, status:"active", modified:"2025-07-21" },
-  { name:"English Appointments", channel:"voice", agents:16, supervisors:4, status:"active", modified:"2025-10-21" },
-  { name:"New Patient Spanish", channel:"voice", agents:12, supervisors:4, status:"active", modified:"2025-07-10" },
-  { name:"New Patient English", channel:"voice", agents:16, supervisors:4, status:"active", modified:"2025-07-10" },
-  { name:"Referrals Spa", channel:"voice", agents:7, supervisors:1, status:"active", modified:"2026-01-09" },
-  { name:"Referrals Eng", channel:"voice", agents:7, supervisors:1, status:"active", modified:"2026-01-09" },
-  { name:"Demo", channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"2025-06-17" }
+  { name:undefined, channel:"voice", agents:1, supervisors:0, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:3, supervisors:1, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:3, supervisors:1, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:9, supervisors:4, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:9, supervisors:4, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:4, supervisors:1, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:3, supervisors:1, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:15, supervisors:4, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:15, supervisors:4, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:11, supervisors:4, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:15, supervisors:4, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:7, supervisors:1, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:7, supervisors:1, status:"inactive", modified:"" },
+  { name:undefined, channel:"voice", agents:0, supervisors:0, status:"inactive", modified:"" }
 ];
 
 const ccAgents = [
@@ -1356,38 +1356,13 @@ const ccAdmins = [
 
 // ── DATA:NUMBERS:START ──
 const numberAllocation = {
-  users: 27, commonArea: 49, autoReceptionist: 35,
-  callQueue: 2, emergencyPool: 7, unassigned: 177
+  users: 27, commonArea: 49, autoReceptionist: 40,
+  callQueue: 2, emergencyPool: 7, unassigned: 172
 };
 
-// ── Usage Data (March 2026, from Zoom APIs — updated Mar 31 EOD) ──
+// ── Usage Data (updated April 1, 2026 via Zoom API) ──
 const phoneUsage = [
-  { name:"Milemnia Rodriguez", calls:1000, inbound:1, outbound:999, totalMinutes:512 },
-  { name:"Freddy Clavijo", calls:594, inbound:130, outbound:464, totalMinutes:1427 },
-  { name:"Doris Carrillos", calls:523, inbound:168, outbound:355, totalMinutes:456 },
-  { name:"Bryan Aparicio", calls:487, inbound:238, outbound:249, totalMinutes:1150 },
-  { name:"Estephani Sanchez", calls:476, inbound:242, outbound:234, totalMinutes:1175 },
-  { name:"Gisself Diaz", calls:406, inbound:78, outbound:328, totalMinutes:1349 },
-  { name:"Carissa Vega", calls:346, inbound:174, outbound:172, totalMinutes:574 },
-  { name:"Niquea Eason", calls:219, inbound:187, outbound:32, totalMinutes:358 },
-  { name:"Wolfang Lagos", calls:218, inbound:60, outbound:158, totalMinutes:479 },
-  { name:"Ned James", calls:215, inbound:64, outbound:151, totalMinutes:317 },
-  { name:"Miranda Ortiz", calls:207, inbound:204, outbound:3, totalMinutes:82 },
-  { name:"Dominic Baguio", calls:169, inbound:0, outbound:169, totalMinutes:405 },
-  { name:"Denise Capalar", calls:133, inbound:0, outbound:133, totalMinutes:573 },
-  { name:"Katherine Coyne", calls:107, inbound:32, outbound:75, totalMinutes:573 },
-  { name:"Venessa Henry", calls:79, inbound:46, outbound:33, totalMinutes:276 },
-  { name:"Jude Duron", calls:70, inbound:13, outbound:57, totalMinutes:104 },
-  { name:"Michell Llovet", calls:30, inbound:0, outbound:30, totalMinutes:217 },
-  { name:"Nathali Fierro", calls:28, inbound:12, outbound:16, totalMinutes:190 },
-  { name:"Cybil Quijote", calls:27, inbound:0, outbound:27, totalMinutes:101 },
-  { name:"Krystelle Dioneza", calls:21, inbound:0, outbound:21, totalMinutes:38 },
-  { name:"Carlos Molina", calls:15, inbound:8, outbound:7, totalMinutes:11 },
-  { name:"Esther Ramdin", calls:15, inbound:8, outbound:7, totalMinutes:63 },
-  { name:"Spencer Hastings", calls:13, inbound:13, outbound:0, totalMinutes:0 },
-  { name:"Sharee Bedassee", calls:12, inbound:10, outbound:2, totalMinutes:11 },
-  { name:"Saul Soto", calls:6, inbound:4, outbound:2, totalMinutes:6 },
-  { name:"Rhayner Hidalgo", calls:1, inbound:1, outbound:0, totalMinutes:0 }
+
 ];
 // ── DATA:NUMBERS:END ──
 
