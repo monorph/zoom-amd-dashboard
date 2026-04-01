@@ -178,7 +178,8 @@
   .admin-btn.active { background: var(--accent-teal-dim); color: var(--accent-teal); border-color: var(--accent-teal); }
   .admin-btn svg { width: 14px; height: 14px; }
   .admin-only { display: none; }
-  body.is-admin .admin-only { display: revert; }
+  body.is-admin .admin-only { display: revert !important; }
+  body.is-admin #refresh-btn { display: inline-flex !important; }
   body:not(.is-admin) select.manager-select { pointer-events: none; opacity: 0.6; }
   body:not(.is-admin) .btn-remove { display: none; }
   body:not(.is-admin) .settings-admin-gate { display: flex; align-items: center; justify-content: center; min-height: 200px; }
